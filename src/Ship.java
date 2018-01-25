@@ -1,7 +1,8 @@
 
 public class Ship {
 	
-	public int lives = 2;
+	public int maxLives = 2;
+	public int lives = 0;
 	public String name;
 	public int size;
 	public String[] position = new String[5];
@@ -12,5 +13,9 @@ public class Ship {
 			System.out.println(position[i] +" ");
 		}
 		
+	}
+
+	public void touched(){
+		lives++;
 	}
 }

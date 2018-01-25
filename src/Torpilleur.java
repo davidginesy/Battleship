@@ -3,7 +3,7 @@ public class Torpilleur extends Ship {
 
 
 	public Torpilleur() {
-		this.name = "Torpilleur";
+		this.name = "To";
 		this.size = 2;
 	}
 }

@@ -3,7 +3,7 @@ public class Croiseur extends Ship {
 
 	
 	public Croiseur() {
-		this.name = "Croiseur";
+		this.name = "Cr";
 		this.size= 4;
 	}
 }
