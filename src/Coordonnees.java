@@ -1,3 +1,4 @@
+import java.util.Random;
 
 public class Coordonnees {
 	
@@ -23,9 +24,18 @@ public class Coordonnees {
         return correct;
     }
 
+    public void setRandom(){
+
+        Random rand1 = new Random();
+        Random rand2 = new Random();
+        X = rand1.nextInt(10); //generate random between 0 and 9
+        Y = rand2.nextInt(10);
+
+    }
+
     //cette methode prend en parametre les coordonnées rentrée au format 'B4'
     //retourne les coordonées sous forme d'un objet ou -1, -1 si incorecte
-    public void parsePoint(String coord) {
+    public boolean parsePoint(String coord) {
 
         coord = coord.toUpperCase();
         int size = coord.length();
@@ -41,7 +51,7 @@ public class Coordonnees {
                 x = (letter - 'A');
 
             }else{
-                correct = false;
+                return false;
             }
 
             try {
@@ -50,42 +60,23 @@ public class Coordonnees {
                 Y = y;
             }
             catch (NumberFormatException e) {
-                correct = false;
-            }
-
-        }else if(size == 3) {
-            int x = -1;
-            char letter = coord.charAt(0);
-            String number = coord.substring(1,2);
-
-            if((letter>='A'&&letter<='J')){
-
-                x = (letter - 'A');
-
-            }else{
-                correct = false;
-            }
-
-
-            try {
-                int y = Integer.parseInt(number) - 1;
-                X = x;
-                Y = y;
-            }
-            catch (NumberFormatException e) {
-                correct = false;
+                return false;
             }
 
         }else{
-            correct = false;
+            return false;
         }
 
 
         if(X>-1 && X<=9 && Y>-1 && Y<=9){
-            correct = true;
+            return true;
         }
+
+        return false;
     }
-        public void parsePointTest(String coord) {
+
+
+    public void parsePointTest(String coord) {
         
             
             char letter = coord.charAt(0);

@@ -20,6 +20,15 @@ public class Gird {
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"}};
 
+    public static ArrayList<Ship> pShips = new ArrayList<Ship>();
+
+    public void moveShip(Ship ship){
+
+        //TODO
+        //deplacer le bateau donnÃ© en parametre
+
+    }
+
 
 
 
@@ -52,6 +61,9 @@ public class Gird {
         }
 
     }
+
+
+    
     public void setShipTest(Ship ship) {
     	Coordonnees coord = new Coordonnees();
     	
@@ -100,7 +112,7 @@ public class Gird {
         return true;
     }
     
-    // Cette methode teste si l'entré de l'utilisateur est correcte, si la place est libre et si le bateau est bien sur une ligne ou une colonne.
+    // Cette methode teste si l'entree de l'utilisateur est correcte, si la place est libre et si le bateau est bien sur une ligne ou une colonne.
     public boolean checkPlacement(Ship ship, ArrayList<Ship> ships) {
 		
 		boolean goodPlacement = false;
@@ -108,7 +120,7 @@ public class Gird {
 			
 			String[] pos = ship.position;
 			int index = 0;
-			// test le format de l'entré de l'utilisateur
+			// test le format de l'entrï¿½ de l'utilisateur
 			while (index < ship.size) {
 				
 				if (pos[index].length()!=2 || !letters.contains(pos[index].substring(0, 1))) {
@@ -127,7 +139,7 @@ public class Gird {
 				}
 				index++;
 			}
-			// test si un bateau est deja sur une case rentré par l'utilisateur
+			// test si un bateau est deja sur une case rentrï¿½ par l'utilisateur
 			for( int i = 0; i<ships.size();i++) {
 				try {
 					boolean test = ships.get(i).position[0].equals("");
@@ -180,6 +192,163 @@ public class Gird {
 		goodPlacement = true;
 		return goodPlacement;
 	}
+
+
+	//this method check if the proximity of the parameter coordonnees respect the rules on the current gird
+	public boolean checkProximity(Coordonnees coordonnees){
+
+        if (!coordonnees.isCorrect()){
+            return false;
+        }
+
+        int x = coordonnees.getX();
+        int y = coordonnees.getY();
+        int xp1, xp2, xm1, xm2;
+        int yp1, yp2, ym1, ym2;
+
+        if(x-1>=0)
+            xm1 = x-1;
+        else
+            xm1 = x;
+
+        if(x-2>=0)
+            xm2 = x-2;
+        else
+            xm2 = x;
+
+
+        if(y-1>=0)
+            ym1 = y-1;
+        else
+            ym1 = y;
+
+        if(y-2>=0)
+            ym2 = y-2;
+        else
+            ym2 = y;
+
+
+
+        if(x+1<=9)
+            xp1 = x+1;
+        else
+            xp1 = x;
+
+        if(x+2<=9)
+            xp2 = x+2;
+        else
+            xp2 = x;
+
+
+        if(y+1<=9)
+            yp1 = y+1;
+        else
+            yp1 = y;
+
+        if(y+2<=9)
+            yp2 = y+2;
+        else
+            yp2 = y;
+
+
+        if(! ((gird[x][y].equals("~~"))||(gird[x][y].equals("X~"))||(gird[x][y].equals("XX"))))
+            return true;//on a ship
+
+
+
+        if(! ((gird[xp1][y].equals("~~"))||(gird[xp1][y].equals("X~"))||(gird[xp1][y].equals("XX"))))
+            return true;
+
+        if(! ((gird[xp2][y].equals("~~"))||(gird[xp2][y].equals("X~"))||(gird[xp2][y].equals("XX"))))
+            return true;
+
+        if(! ((gird[xm1][y].equals("~~"))||(gird[xm1][y].equals("X~"))||(gird[xm1][y].equals("XX"))))
+            return true;
+
+        if(! ((gird[xm2][y].equals("~~"))||(gird[xm2][y].equals("X~"))||(gird[xm2][y].equals("XX"))))
+            return true;
+
+
+        if(! ((gird[x][yp1].equals("~~"))||(gird[x][yp1].equals("X~"))||(gird[x][yp1].equals("XX"))))
+            return true;
+
+        if(! ((gird[x][yp2].equals("~~"))||(gird[x][yp2].equals("X~"))||(gird[x][yp2].equals("XX"))))
+            return true;
+
+        if(! ((gird[x][ym1].equals("~~"))||(gird[x][ym1].equals("X~"))||(gird[x][ym1].equals("XX"))))
+            return true;
+
+        if(! ((gird[x][ym2].equals("~~"))||(gird[x][ym2].equals("X~"))||(gird[x][ym2].equals("XX"))))
+            return true;
+
+
+        return false;
+
+    }
+
+
+
+    /*this method can be used for sending an attack from girdAttack to girdDef
+   * it return true if the target is a ship of girdDef and false if is water
+   * it incremente the nulber of lives for each ship type and print the target on the girdAttack:
+   *
+   * 'XX' is print if the target touched a ship
+   * 'X~' is print if the target is water
+   *
+   */
+    public boolean target(Coordonnees coordonnees, Gird girdTarget){
+
+        Contre_torpilleur contre_torpilleur = new Contre_torpilleur();
+        String Ct = contre_torpilleur.name;
+
+        Croiseur croiseur = new Croiseur();
+        String Cr = croiseur.name;
+
+        Porte_avion porte_avion = new Porte_avion();
+        String Pa = porte_avion.name;
+
+        Sous_marin sous_marin = new Sous_marin();
+        String Sm = sous_marin.name;
+
+        Torpilleur torpilleur = new Torpilleur();
+        String To = torpilleur.name;
+
+
+
+
+        if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Ct)){
+            contre_torpilleur.touched();
+            gird[coordonnees.getX()][coordonnees.getY()]="XX";
+            return true;
+
+        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Cr)){
+            croiseur.touched();
+            gird[coordonnees.getX()][coordonnees.getY()]="XX";
+            return true;
+
+        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Pa)){
+            porte_avion.touched();
+            gird[coordonnees.getX()][coordonnees.getY()]="XX";
+            return true;
+
+        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Sm)){
+            sous_marin.touched();
+            gird[coordonnees.getX()][coordonnees.getY()]="XX";
+            return true;
+
+        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(To)){
+            torpilleur.touched();
+            gird[coordonnees.getX()][coordonnees.getY()]="XX";
+            return true;
+
+        }else{
+            gird[coordonnees.getX()][coordonnees.getY()]="X~";
+        }
+
+        return false;
+
+    }
+
 
 
 
