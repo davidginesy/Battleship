@@ -34,7 +34,7 @@ public class GameBoard {
 	           System.out.println();
 	       }
 	}
-	public static void placeShips() {
+	/*public static void placeShips() {
 		ArrayList<Ship> ships = new ArrayList<Ship>();
 		ships.add(new Contre_torpilleur());
 		ships.add(new Croiseur());
@@ -54,16 +54,17 @@ public class GameBoard {
 			indice=0;
 			myship.showPosition();
 			
-			/*Coordonnées coord = new Coordonnées(-1, -1);
-			Coordonnées coord1 = coord.parsePoint(position);*/
+			Coordonnées coord = new Coordonnées(-1, -1);
+			Coordonnées coord1 = coord.parsePoint(position);
 			
 		}
 		read.close();
 	}
+	
 	public static void main(String[] args) {
 		initBoard();
 		showBoard();
 		placeShips();
 		
-	}
+	}*/
 }

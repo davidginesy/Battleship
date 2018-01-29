@@ -53,7 +53,7 @@ public class Coordonnees {
                 correct = false;
             }
 
-        } else if(size == 3) {
+        }else if(size == 3) {
             int x = -1;
             char letter = coord.charAt(0);
             String number = coord.substring(1,2);
@@ -84,6 +84,16 @@ public class Coordonnees {
         if(X>-1 && X<=9 && Y>-1 && Y<=9){
             correct = true;
         }
+    }
+        public void parsePointTest(String coord) {
+        
+            
+            char letter = coord.charAt(0);
+            String number = coord.substring(1);
+            X = (letter - 'A');           
+            Y = Integer.parseInt(number);
+    }
 
-}
+
+
 }
