@@ -115,8 +115,8 @@ public class GameLoop {
         }
         
 		gird2.printGird();
-        //TODO
-
+		gird1.moveShip();
+		//gird2.moveShip(); //TEST
 
 
         //Game loop

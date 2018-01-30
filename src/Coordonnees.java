@@ -55,7 +55,7 @@ public class Coordonnees {
             }
 
             try {
-                int y = Integer.parseInt(number) - 1;
+                int y = Integer.parseInt(number);
                 X = x;
                 Y = y;
             }

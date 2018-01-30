@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by Etudes on 25/01/2018.
@@ -22,12 +23,52 @@ public class Gird {
 
     public ArrayList<Ship> pShips = new ArrayList<Ship>();
 
-    public void moveShip(Ship ship){
+    public void moveShip(){
 
         //TODO
         //deplacer le bateau donné en parametre
-
-    }
+    	Scanner read = new Scanner(System.in);
+    	String answer;
+    	Ship movingShip;
+    	String[] moves = new String[2];
+    	do {
+        	System.out.println("\n Do you want to move a ship ? (Y/N) : \n");
+        	answer = read.next();
+        }while( !answer.toUpperCase().equals("Y") &&  !answer.toUpperCase().equals("N"));
+    	
+    	if(answer.toUpperCase().equals("Y")){
+    		do {
+    			System.out.println("\n Select the ship you want to move (Ct, Cr, Pa, Sm or To) : \n");
+        		answer = read.next();
+        	}while(!answer.toUpperCase().equals("CT") && !answer.toUpperCase().equals("CR") && !answer.toUpperCase().equals("PA") && !answer.toUpperCase().equals("SM") && !answer.toUpperCase().equals("TO"));        
+    		int indice = 0;
+        	while(!pShips.get(indice).name.toUpperCase().equals(answer.toUpperCase())) {
+        		indice++;
+        	}
+        	movingShip = pShips.get(indice);
+        	do {
+        		System.out.println("\nYou can move your "+ movingShip.name +" up to 2 cases ! "
+            			+ "Which direction do you chose ? (up, down, left or right) \n");
+            	answer = read.next();
+            }while( !answer.toUpperCase().equals("UP") &&  !answer.toUpperCase().equals("DOWN") && !answer.toUpperCase().equals("LEFT") &&  !answer.toUpperCase().equals("RIGHT"));
+        	moves[0]=answer;
+        	do {       		
+        		System.out.println("\nIf you want to move again, chose a 2nd direction (up, down, left or right) ! If not enter 'n' OR 'N' \n");
+            	answer = read.next();
+            }while(!answer.toUpperCase().equals("N") && !answer.toUpperCase().equals("UP") &&  !answer.toUpperCase().equals("DOWN") && !answer.toUpperCase().equals("LEFT") &&  !answer.toUpperCase().equals("RIGHT"));
+        	if(!answer.toUpperCase().equals("N")) moves[1]=answer;
+        	else moves[1] = " ";
+        	System.out.println("move(s) chosen : "+ moves[0] + " "+ moves[1]);
+        	Coordonnees coord = new Coordonnees();
+        	
+        	for(int i =0; i<movingShip.size; i++) {
+        		coord.parsePoint(movingShip.position[i]);
+        		gird[coord.getX()][coord.getY()]="~~";
+        	}
+        	printGird();
+    	}
+    	
+    	}
 
 
 
