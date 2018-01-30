@@ -11,7 +11,8 @@ public class GameLoop {
 
 
 	public static boolean p1ShipsPlaced = false;
-
+	public static boolean p2ShipsPlaced = false;
+	public static String nbplayers;
 
     //main activity of the game
     public static void main(String [ ] args)
@@ -20,29 +21,37 @@ public class GameLoop {
         //Coordonnées object
         Coordonnees coordonnees = new Coordonnees();
         GameRules gameRules = new GameRules();
-
+        Scanner read = new Scanner(System.in);
         //player 1
         //game initialisation : ask for player 1
         Gird gird1 = new Gird();
+     
         
-        gird1.printGird();
         gird1.pShips.add(new Contre_torpilleur());
         gird1.pShips.add(new Croiseur());
         gird1.pShips.add(new Porte_avion());
         gird1.pShips.add(new Sous_marin());
         gird1.pShips.add(new Torpilleur());
-        System.out.println("You are about to position your ships on the grid. In order to position a ship, enter its coordinates one by one (a0,A9,B4,j9,...). \nThe order is IMPORTANT !"
+        System.out.println("\n WELCOME TO BATTLESHIP+");
+        do {
+        	System.out.println(" 1 OR 2 Players (1/2) : ");
+        	nbplayers = read.next();
+        	System.out.println("You choose "+nbplayers+ " player(s) \n");
+        }while( !nbplayers.equals("1") && !nbplayers.equals("2"));
+        
+        System.out.println("You are about to position your ships on the grid. In order to position a ship, enter its coordinates one by one (a0,A9,B4,j9,...)."
+        		+ " \nThe order is IMPORTANT !"
         		+ "To position a 3-case long ship on the first line in the upper left of the grid, enter : a0, b0, c0 ! \nHave fun :D "
 				+ " \n\n");
-        Scanner read = new Scanner(System.in);
-		
+        
+        gird1.printGird();
 		for (Ship myship : gird1.pShips) {
-			System.out.println("\nPosition your "+ myship.size +"-case long"+" "+ myship.name +"\n");
+			
 			do {
-				
+				System.out.println("\n Ready to position your "+ myship.size +"-case long"+" "+ myship.name +" !? \n");
 				for(int i=0; i < myship.size;i++) {
-					System.out.println("Enter a coordinate on the grid (A0,B6,j9,...) : \n");
-					String position = read.next(); // Scans the next token of the input as an int.
+					System.out.println("Enter the coordinate number "+i+" of your boat on the grid (A0,B6,j9,...) : \n");
+					String position = read.next(); 
 					myship.position[i]=position.toUpperCase();
 				}
 				p1ShipsPlaced = gird1.checkPlacement(myship, gird1.pShips);
@@ -51,66 +60,61 @@ public class GameLoop {
 			gird1.setShipTest(myship);
 			gird1.printGird();
 			}
-		//read.close();
-        
-		/*
-		Scanner read = new Scanner(System.in);
-		System.out.println("You are about to position your ships on the grid. to position a ship enter a coordinate "
-				+ "(A0,B6,j9,...) which is the head of your cheap. Then, when asked, enter a direction (horizontal or vertical).");
-				
-		for (Ship myship : p1Ships) {
-			System.out.println("Position your "+ myship.size +"-box long"+" "+ myship.name +"\n");	
-			
-			do {
-			System.out.println("Enter a box on the grid (A0,B6,j9,...) : \n");
-			String position = read.next(); 
-			myship.position=(String) position.toUpperCase();
-			System.out.println("Enter a direction : horizontal or vertical (H/V) : \n");
-			String direction = read.next(); 
-			if(direction.toUpperCase().equals("H")) myship.direction=true;
-			else if (direction.toUpperCase().equals("V")) myship.direction=false;
-			coordonnees.parsePoint(myship.position);	
-			
-			}
-			while(!coordonnees.isCorrect()&&gird1.checkSpace(coordonnees,myship.size,myship.direction));
-			
-			
-			}
-		read.close();
-			*/
 		
-
-        
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		System.out.println("\n You have successfully placed your ships !! \n");
+		System.out.println("\n player's 2 turn ! \n ");
+		
         //player 2
         Gird gird2 = new Gird();
         //print the gird
-        gird2.printGird();
 
         gird2.pShips.add(new Contre_torpilleur());
         gird2.pShips.add(new Croiseur());
         gird2.pShips.add(new Porte_avion());
         gird2.pShips.add(new Sous_marin());
         gird2.pShips.add(new Torpilleur());
-        //random init for player 2
-
+       
+        if(nbplayers.equals("1")) {  //random init for player 2
+        	boolean direction;
+    		for (Ship myship : gird2.pShips) {					
+    			do {
+    				
+    				double rdm =  Math.random();
+    				if(rdm < 0.5) direction = true;
+    				else direction = false;
+    				coordonnees.setRandom();
+    		
+    				} while (!gird2.checkSpace(coordonnees, myship.size, direction));
+    			gird2.setShip(myship, coordonnees,myship.size, direction);
+    			}
+        }
+        else {
+        	System.out.println("You are about to position your ships on the grid. In order to position a ship, enter its coordinates one by one (a0,A9,B4,j9,...)."
+            		+ " \nThe order is IMPORTANT !"
+            		+ "To position a 3-case long ship on the first line in the upper left of the grid, enter : a0, b0, c0 ! \nHave fun :D "
+    				+ " \n\n");
+            
+        	gird2.printGird();
+    		for (Ship myship : gird2.pShips) {
+    			  			
+				do {
+    				System.out.println("\n Ready to position your "+ myship.size +"-case long"+" "+ myship.name +" !? \n");
+    				for(int i=0; i < myship.size;i++) {
+    					System.out.println("Enter the coordinate number "+i+" of your boat on the grid (A0,B6,j9,...) : \n");
+    					String position = read.next(); 
+    					myship.position[i]=position.toUpperCase();
+    				}
+    				p2ShipsPlaced = gird2.checkPlacement(myship, gird2.pShips);
+    			} while (p2ShipsPlaced == false);
+    			//myship.showPosition();
+    			gird2.setShipTest(myship);
+    			gird2.printGird();
+    			}
+    		
+    		System.out.println("\n You have successfully placed your ships !! \n");
+        }
+        
+		gird2.printGird();
         //TODO
 
 
@@ -127,7 +131,7 @@ public class GameLoop {
 
 
             System.out.println("Enter a TARGET coordinate on the grid (A0,B6,j9,...) : \n");
-            position = read.next(); // Scans the next token of the input as an int.
+            position = read.next();
             coordonnees.parsePoint(position);
 
             //first step
@@ -140,7 +144,7 @@ public class GameLoop {
                 if(!coordonnees.isCorrect())
                     System.out.println("Enter another correct target coordinate on the grid like A0,B6,j9,... : \n");
 
-                position = read.next(); // Scans the next token of the input as an int.
+                position = read.next(); 
                 coordonnees.parsePoint(position);
             }
 

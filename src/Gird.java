@@ -20,7 +20,7 @@ public class Gird {
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"}};
 
-    public static ArrayList<Ship> pShips = new ArrayList<Ship>();
+    public ArrayList<Ship> pShips = new ArrayList<Ship>();
 
     public void moveShip(Ship ship){
 
@@ -70,7 +70,7 @@ public class Gird {
     	for(int i = 0; i<ship.size; i++) {
     		coord.parsePointTest(ship.position[i]);
     		//System.out.println("ligne : "+coord.getX() + " colonne : " + coord.getY());
-    		 gird[coord.getY()][coord.getX()]=ship.name;
+    		 gird[coord.getX()][coord.getY()]=ship.name;
     	}
     }
 
@@ -124,17 +124,17 @@ public class Gird {
 			while (index < ship.size) {
 				
 				if (pos[index].length()!=2 || !letters.contains(pos[index].substring(0, 1))) {
-					System.out.println("Invalid coordinate, try again !");
+					System.out.println("Invalid coordinate, try again ! \n");
 					return goodPlacement;
 				}
 				try {
 					int test = Integer.parseInt(pos[index].substring(1));
 					if (test > 9) {
-						System.out.println("Invalid coordinate, try again !");
+						System.out.println("Invalid coordinate, try again ! \n");
 						return goodPlacement;
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Invalid coordinate, try again !");
+					System.out.println("Invalid coordinate, try again ! \n");
 					return goodPlacement;
 				}
 				index++;
@@ -155,7 +155,7 @@ public class Gird {
 						for(int k=0; k<ship.size; k++) {
 							//System.out.println("j : "+j);
 							if(ships.get(i).position[j].equals(ship.position[k])) {
-								System.out.println("There is already a boat here !");
+								System.out.println("There is already a boat here, try again ! \n");
 								return goodPlacement;
 							}
 						}
@@ -177,14 +177,17 @@ public class Gird {
 			}
 			if(ligne[0] == ligne[1]) choix = "ligne";
 			if (colonne[0] == colonne[1]) choix = "colonne";
-			if(choix.equals(" ")) return goodPlacement;	
+			if(choix.equals(" ")) {
+				System.out.println("Position your boat on a line or a column, try again ! \n");
+				return goodPlacement;	
+			}
 			for(int n=1; n <ship.size; n++) {
 				if(choix.equals("ligne") && (ligne[n] != ligne[0] || colonne[n] != colonne[n-1]+1)) {
-					System.out.println("Position your boat on a line !");
+					System.out.println("Position your boat on a line, try again ! \n");
 					return goodPlacement;
 				}
 				if(choix.equals("colonne") && (colonne[n] != colonne[0] || ligne[n] != ligne[n-1]+1)) {
-					System.out.println("Position yout boat on a coloumn");
+					System.out.println("Position yout boat on a column, try again ! \n");
 					return goodPlacement;
 				}
 					
@@ -358,12 +361,13 @@ public class Gird {
 
     //this method can print the current gird
     public void printGird(){
-    	System.out.println("\tA \tB \tC \tD \tE \tF \tG \tH \tI \tJ");
+    	String[] rows = {"A","B","C","D","E","F","G","H","I","J"};
+    	System.out.println("\t0 \t1 \t2 \t3 \t4 \t5 \t6 \t7 \t8 \t9");
 	    System.out.println();
 
         for(int i = 0; i<10; i++)
         {
-        	System.out.print((i)+" ");
+        	System.out.print(rows[i]+" ");
             for(int j = 0; j<10; j++)
             {
                 System.out.print("\t"+ gird[i][j]);
