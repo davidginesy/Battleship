@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -22,6 +24,53 @@ public class Gird {
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"}};
 
     public ArrayList<Ship> pShips = new ArrayList<Ship>();
+    
+    public void setPosition() {
+    	
+    	String[] rows = {"A","B","C","D","E","F","G","H","I","J"};
+    	List<String> Ct = new ArrayList<>();
+    	List<String> Cr = new ArrayList<>();
+    	List<String> Pa = new ArrayList<>();
+    	List<String> Sm = new ArrayList<>();
+    	List<String> To = new ArrayList<>();
+    	
+    	for(int i = 0; i<10; i++) {
+    		for(int j = 0; j<10; j++) {
+    			if(gird[i][j].equals("Ct")) Ct.add(rows[i]+Integer.toString(j));
+    			else if(gird[i][j].equals("Cr")) Cr.add(rows[i]+Integer.toString(j));
+    			else if(gird[i][j].equals("Pa")) Pa.add(rows[i]+Integer.toString(j));
+    			else if(gird[i][j].equals("Sm")) Sm.add(rows[i]+Integer.toString(j));
+    			else if(gird[i][j].equals("To")) To.add(rows[i]+Integer.toString(j));
+    		}
+    	}
+    	for(Ship ship : pShips) {
+    		if(ship.name.equals("Ct")) {
+    			for(int k = 0; k<ship.size;k++) {
+    				ship.position[k] = Ct.get(k);
+    			}
+    		}
+    		else if(ship.name.equals("Cr")) {
+    			for(int k = 0; k<ship.size;k++) {
+    				ship.position[k] = Cr.get(k);
+    			}
+    		}
+    		else if(ship.name.equals("Pa")) {
+    			for(int k = 0; k<ship.size;k++) {
+    				ship.position[k] = Pa.get(k);
+    			}
+    		}
+    		else if(ship.name.equals("Sm")) {
+    			for(int k = 0; k<ship.size;k++) {
+    				ship.position[k] = Sm.get(k);
+    			}
+    		}
+    		else if(ship.name.equals("To")) {
+    			for(int k = 0; k<ship.size;k++) {
+    				ship.position[k] = To.get(k);
+    			}
+    		}
+    	}
+    }
 
     public void moveShip(){
 
@@ -31,6 +80,12 @@ public class Gird {
     	String answer;
     	Ship movingShip;
     	String[] moves = new String[2];
+    	int[] mvt = new int[2];
+    	Coordonnees coord = new Coordonnees();
+    	boolean direction;
+    	boolean result = true;
+    	
+    	
     	do {
         	System.out.println("\n Do you want to move a ship ? (Y/N) : \n");
         	answer = read.next();
@@ -38,37 +93,133 @@ public class Gird {
     	
     	if(answer.toUpperCase().equals("Y")){
     		do {
-    			System.out.println("\n Select the ship you want to move (Ct, Cr, Pa, Sm or To) : \n");
-        		answer = read.next();
-        	}while(!answer.toUpperCase().equals("CT") && !answer.toUpperCase().equals("CR") && !answer.toUpperCase().equals("PA") && !answer.toUpperCase().equals("SM") && !answer.toUpperCase().equals("TO"));        
-    		int indice = 0;
-        	while(!pShips.get(indice).name.toUpperCase().equals(answer.toUpperCase())) {
-        		indice++;
-        	}
-        	movingShip = pShips.get(indice);
-        	do {
-        		System.out.println("\nYou can move your "+ movingShip.name +" up to 2 cases ! "
-            			+ "Which direction do you chose ? (up, down, left or right) \n");
-            	answer = read.next();
-            }while( !answer.toUpperCase().equals("UP") &&  !answer.toUpperCase().equals("DOWN") && !answer.toUpperCase().equals("LEFT") &&  !answer.toUpperCase().equals("RIGHT"));
-        	moves[0]=answer;
-        	do {       		
-        		System.out.println("\nIf you want to move again, chose a 2nd direction (up, down, left or right) ! If not enter 'n' OR 'N' \n");
-            	answer = read.next();
-            }while(!answer.toUpperCase().equals("N") && !answer.toUpperCase().equals("UP") &&  !answer.toUpperCase().equals("DOWN") && !answer.toUpperCase().equals("LEFT") &&  !answer.toUpperCase().equals("RIGHT"));
-        	if(!answer.toUpperCase().equals("N")) moves[1]=answer;
-        	else moves[1] = " ";
-        	System.out.println("move(s) chosen : "+ moves[0] + " "+ moves[1]);
-        	Coordonnees coord = new Coordonnees();
-        	
-        	for(int i =0; i<movingShip.size; i++) {
+    			if(!result)System.out.println("\n You can't move there, try again ! \n");
+    			do {
+        			System.out.println("\n Select the ship you want to move (Ct, Cr, Pa, Sm or To) : \n");
+            		answer = read.next();
+            	}while(!answer.toUpperCase().equals("CT") && !answer.toUpperCase().equals("CR") && !answer.toUpperCase().equals("PA") && !answer.toUpperCase().equals("SM") && !answer.toUpperCase().equals("TO"));        
+        		int indice = 0;
+            	while(!pShips.get(indice).name.toUpperCase().equals(answer.toUpperCase())) {
+            		indice++;
+            	}
+            	movingShip = pShips.get(indice);
+            	do {
+            		System.out.println("\nYou can move your "+ movingShip.name +" up to 2 cases ! "
+                			+ "Which direction do you chose ? (up, down, left or right) \n");
+                	answer = read.next();
+                }while( !answer.toUpperCase().equals("UP") &&  !answer.toUpperCase().equals("DOWN") && !answer.toUpperCase().equals("LEFT") &&  !answer.toUpperCase().equals("RIGHT"));
+            	moves[0]=answer.toUpperCase();
+            	do {       		
+            		System.out.println("\nIf you want to move again, chose a 2nd direction (up, down, left or right) ! If not enter 'n' OR 'N' \n");
+                	answer = read.next();
+                }while(!answer.toUpperCase().equals("N") && !answer.toUpperCase().equals("UP") &&  !answer.toUpperCase().equals("DOWN") && !answer.toUpperCase().equals("LEFT") &&  !answer.toUpperCase().equals("RIGHT"));
+            	if(!answer.toUpperCase().equals("N")) moves[1]=answer.toUpperCase();
+            	else moves[1] = " ";
+            	
+            	
+            	
+            	
+            	if(moves[0].equals("UP")) {
+            		mvt[0]=-1;
+            		if(moves[1].equals("UP")) {
+                		mvt[0] = -2;
+                		mvt[1] = 0;
+                	}
+                	else if(moves[1].equals("DOWN")){
+                		mvt[0] = 0;
+                		mvt[1] = 0;
+                	}
+                	else if(moves[1].equals("RIGHT")) {
+                		mvt[0] = -1;
+                		mvt[1] = 1;
+                	}
+                	else if(moves[1].equals("LEFT")) {
+                		mvt[0] = -1;
+                		mvt[1] = -1;
+                	}
+            	}
+            	else if(moves[0].equals("DOWN")){
+            		mvt[0]=1;
+            		if(moves[1].equals("UP")) {
+            			mvt[0] = 0;
+                		mvt[1] = 0;
+                	}
+                	else if(moves[1].equals("DOWN")){
+                		mvt[0] = 2;
+                		mvt[1] = 0;
+                	}
+                	else if(moves[1].equals("RIGHT")) {
+                		mvt[0] = 1;
+                		mvt[1] = 1;
+                	}
+                	else if(moves[1].equals("LEFT")) {
+                		mvt[0] = 1;
+                		mvt[1] = -1;
+                	}
+            	}
+            	else if(moves[0].equals("RIGHT")) {
+            		mvt[1]=1;
+            		if(moves[1].equals("UP")) {
+            			mvt[0] = -1;
+                		mvt[1] = 1;
+                	}
+                	else if(moves[1].equals("DOWN")){
+                		mvt[0] = 1;
+                		mvt[1] = 1;
+                	}
+                	else if(moves[1].equals("RIGHT")) {
+                		mvt[0] = 0;
+                		mvt[1] = 2;
+                	}
+                	else if(moves[1].equals("LEFT")) {
+                		mvt[0] = 0;
+                		mvt[1] = 0;
+                	}
+            	}
+            	else if(moves[0].equals("LEFT")) {
+            		mvt[1]=-1;
+            		if(moves[1].equals("UP")) {
+            			mvt[0] = -1;
+                		mvt[1] = -1;
+                	}
+                	else if(moves[1].equals("DOWN")){
+                		mvt[0] = 1;
+                		mvt[1] = -1;
+                	}
+                	else if(moves[1].equals("RIGHT")) {
+                		mvt[0] = 0;
+                		mvt[1] = 0;
+                	}
+                	else if(moves[1].equals("LEFT")) {
+                		mvt[0] = 0;
+                		mvt[1] = -2;
+                	}
+            	}
+            	ArrayList<Integer> ligne = new ArrayList<>();
+            	ArrayList<Integer> colonne = new ArrayList<>();
+	        	for(int m = 0; m<movingShip.size; m++) {
+					coord.parsePoint(movingShip.position[m]);
+					ligne.add(coord.getX());
+					colonne.add(coord.getY());
+					
+				}
+				if(ligne.get(0) == ligne.get(1)) direction = true;
+				else direction = false;
+				int minL = ligne.indexOf(Collections.min(ligne));
+				int minC = colonne.indexOf(Collections.min(colonne));
+	            coord.setX(ligne.get(minL) + mvt[0]);
+	            coord.setY(colonne.get(minC) + mvt[1]);
+	            result = checkSpace(coord, movingShip.size, direction, movingShip);
+    		}while(!checkSpace(coord, movingShip.size, direction, movingShip));
+    		System.out.println("Your "+movingShip.name + " moved "+ moves[0] + " "+ moves[1]);
+        	for(int i  =0; i<movingShip.size; i++) {
         		coord.parsePoint(movingShip.position[i]);
         		gird[coord.getX()][coord.getY()]="~~";
+        		gird[coord.getX()+mvt[0]][coord.getY()+mvt[1]]= movingShip.name;
         	}
         	printGird();
-    	}
-    	
-    	}
+    	}	
+    }
 
 
 
@@ -119,29 +270,29 @@ public class Gird {
     //coordonnees is the coo of the HEAD of the ship
     // and horizontal the orientation
     //and size the length of the ship
-    public boolean checkSpace(Coordonnees coordonnees, int size, Boolean horizontal){
+    public boolean checkSpace(Coordonnees coordonnees, int size, Boolean horizontal, Ship ship){
 
         int i=0, j=0;
         int x = coordonnees.getX();
         int y = coordonnees.getY();
 
         if(horizontal){
-            if((y+size)>9)
+            if((y+size)>9 || x<0 || y>9 || y<0 || x>9)
                 return false;
             while(i < size){
 
-                if(! (gird[x][y].equals("~~")))
+                if(! (gird[x][y].equals("~~") && !gird[x][y].equals(ship.name) ))
                     return false;
                 y++;
                 i++;
             }
 
         }else{
-            if((x+size)>9)
+            if((x+size)>9 || x<0 || y>9 || y<0 || x>9)
                 return false;
             while(i < size){
 
-                if(! (gird[x][y].equals("~~")))
+                if(! (gird[x][y].equals("~~")  && !gird[x][y].equals(ship.name)))
                     return false;
                 x++;
                 i++;
@@ -170,7 +321,7 @@ public class Gird {
 				}
 				try {
 					int test = Integer.parseInt(pos[index].substring(1));
-					if (test > 9) {
+					if (test > 9 || test < 0) {
 						System.out.println("Invalid coordinate, try again ! \n");
 						return goodPlacement;
 					}
@@ -212,8 +363,8 @@ public class Gird {
 			Coordonnees coord = new Coordonnees();
 			for(int m = 0; m<ship.size; m++) {
 				coord.parsePoint(ship.position[m]);
-				ligne[m] = coord.getY();
-				colonne[m] = coord.getX();
+				ligne[m] = coord.getX();
+				colonne[m] = coord.getY();
 				
 			}
 			if(ligne[0] == ligne[1]) choix = "ligne";
@@ -418,7 +569,130 @@ public class Gird {
         }
     }
 
-
-
-
+	public void moveRandomShip() {
+		// TODO Auto-generated method stub
+		//TODO
+        //deplacer le bateau donné en parametre
+		Random rdm = new Random();
+		ArrayList<String> listMove = new ArrayList<>();
+		listMove.add("UP");
+		listMove.add("DOWN");
+		listMove.add("RIGHT");
+		listMove.add("LEFT");
+    	Ship movingShip;
+    	String[] moves = new String[2];
+    	int[] mvt = new int[2];
+    	Coordonnees coord = new Coordonnees();
+    	boolean direction;
+    	
+    	
+    	
+    	
+    	if(Math.random() < 0.5){
+    		do {
+    			movingShip = pShips.get(rdm.nextInt(pShips.size()));
+            	moves[0]=listMove.get(rdm.nextInt(listMove.size()));
+            	listMove.add("N");
+            	moves[1]=listMove.get(rdm.nextInt(listMove.size()));
+            	
+            	if(moves[0].equals("UP")) {
+            		mvt[0]=-1;
+            		if(moves[1].equals("UP")) {
+                		mvt[0] = -2;
+                		mvt[1] = 0;
+                	}
+                	else if(moves[1].equals("DOWN")){
+                		mvt[0] = 0;
+                		mvt[1] = 0;
+                	}
+                	else if(moves[1].equals("RIGHT")) {
+                		mvt[0] = -1;
+                		mvt[1] = 1;
+                	}
+                	else if(moves[1].equals("LEFT")) {
+                		mvt[0] = -1;
+                		mvt[1] = -1;
+                	}
+            	}
+            	else if(moves[0].equals("DOWN")){
+            		mvt[0]=1;
+            		if(moves[1].equals("UP")) {
+            			mvt[0] = 0;
+                		mvt[1] = 0;
+                	}
+                	else if(moves[1].equals("DOWN")){
+                		mvt[0] = 2;
+                		mvt[1] = 0;
+                	}
+                	else if(moves[1].equals("RIGHT")) {
+                		mvt[0] = 1;
+                		mvt[1] = 1;
+                	}
+                	else if(moves[1].equals("LEFT")) {
+                		mvt[0] = 1;
+                		mvt[1] = -1;
+                	}
+            	}
+            	else if(moves[0].equals("RIGHT")) {
+            		mvt[1]=1;
+            		if(moves[1].equals("UP")) {
+            			mvt[0] = -1;
+                		mvt[1] = 1;
+                	}
+                	else if(moves[1].equals("DOWN")){
+                		mvt[0] = 1;
+                		mvt[1] = 1;
+                	}
+                	else if(moves[1].equals("RIGHT")) {
+                		mvt[0] = 0;
+                		mvt[1] = 2;
+                	}
+                	else if(moves[1].equals("LEFT")) {
+                		mvt[0] = 0;
+                		mvt[1] = 0;
+                	}
+            	}
+            	else if(moves[0].equals("LEFT")) {
+            		mvt[1]=-1;
+            		if(moves[1].equals("UP")) {
+            			mvt[0] = -1;
+                		mvt[1] = -1;
+                	}
+                	else if(moves[1].equals("DOWN")){
+                		mvt[0] = 1;
+                		mvt[1] = -1;
+                	}
+                	else if(moves[1].equals("RIGHT")) {
+                		mvt[0] = 0;
+                		mvt[1] = 0;
+                	}
+                	else if(moves[1].equals("LEFT")) {
+                		mvt[0] = 0;
+                		mvt[1] = -2;
+                	}
+            	}
+            	ArrayList<Integer> ligne = new ArrayList<>();
+            	ArrayList<Integer> colonne = new ArrayList<>();
+	        	for(int m = 0; m<movingShip.size; m++) {
+					coord.parsePoint(movingShip.position[m]);
+					ligne.add(coord.getX());
+					colonne.add(coord.getY());
+					
+				}
+				if(ligne.get(0) == ligne.get(1)) direction = true;
+				else direction = false;
+				int minL = ligne.indexOf(Collections.min(ligne));
+				int minC = colonne.indexOf(Collections.min(colonne));
+	            coord.setX(ligne.get(minL) + mvt[0]);
+	            coord.setY(colonne.get(minC) + mvt[1]);
+    		}while(!checkSpace(coord, movingShip.size, direction, movingShip));
+        	for(int i  =0; i<movingShip.size; i++) {
+        		coord.parsePoint(movingShip.position[i]);
+        		gird[coord.getX()][coord.getY()]="~~";
+        		gird[coord.getX()+mvt[0]][coord.getY()+mvt[1]]= movingShip.name;
+        	}
+        	printGird();
+    	}	
+		
+	}
 }

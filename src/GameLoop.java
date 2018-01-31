@@ -38,10 +38,10 @@ public class GameLoop {
         	nbplayers = read.next();
         	System.out.println("You choose "+nbplayers+ " player(s) \n");
         }while( !nbplayers.equals("1") && !nbplayers.equals("2"));
-        
+       
         System.out.println("You are about to position your ships on the grid. In order to position a ship, enter its coordinates one by one (a0,A9,B4,j9,...)."
         		+ " \nThe order is IMPORTANT !"
-        		+ "To position a 3-case long ship on the first line in the upper left of the grid, enter : a0, b0, c0 ! \nHave fun :D "
+        		+ "To position a 3-case long ship on the first line in the upper left of the grid, enter : a0, a1, a2 ! \nHave fun :D "
 				+ " \n\n");
         
         gird1.printGird();
@@ -62,9 +62,10 @@ public class GameLoop {
 			}
 		
 		System.out.println("\n You have successfully placed your ships !! \n");
-		System.out.println("\n player's 2 turn ! \n ");
 		
         //player 2
+        System.out.println("\n player's 2 turn ! \n ");
+		
         Gird gird2 = new Gird();
         //print the gird
 
@@ -84,9 +85,10 @@ public class GameLoop {
     				else direction = false;
     				coordonnees.setRandom();
     		
-    				} while (!gird2.checkSpace(coordonnees, myship.size, direction));
+    				} while (!gird2.checkSpace(coordonnees, myship.size, direction, myship));
     			gird2.setShip(myship, coordonnees,myship.size, direction);
     			}
+    		System.out.println("\n Sips placed !! \n");
         }
         else {
         	System.out.println("You are about to position your ships on the grid. In order to position a ship, enter its coordinates one by one (a0,A9,B4,j9,...)."
@@ -113,11 +115,27 @@ public class GameLoop {
     		
     		System.out.println("\n You have successfully placed your ships !! \n");
         }
+        gird2.setPosition();
         
-		gird2.printGird();
+        /******************** Ce bout de code correspond au deplacement d'un bateau aléatoire ou non en fonction du nombre de joueur ************************/
+        System.out.println("\n player's 1 turn ! \n");
+		gird1.printGird();	
 		gird1.moveShip();
-		//gird2.moveShip(); //TEST
-
+		gird1.setPosition();
+		
+		System.out.println("\n player's 2 turn ! \n");
+		if(nbplayers.equals("2")) {
+			gird2.printGird();	
+			gird2.moveShip(); //TEST
+			gird2.setPosition();
+		}
+		else {
+			gird2.printGird();	
+			gird2.moveRandomShip();
+			gird2.setPosition();
+		}
+		
+		/******** FIN DU CODE POUR LE DEPLACEMENT********/
 
         //Game loop
         String position = "A1";
