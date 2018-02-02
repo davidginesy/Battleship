@@ -12,12 +12,14 @@ public class GameLoop {
 
 	public static boolean p1ShipsPlaced = false;
 	public static boolean p2ShipsPlaced = false;
-	public static String nbplayers;
+	public static String nbplayers = "1";
 
     //main activity of the game
     public static void main(String [ ] args)
     {
+        
         boolean gameContinue = true;
+        
         //Coordonnées object
         Coordonnees coordonnees = new Coordonnees();
         GameRules gameRules = new GameRules();
@@ -117,7 +119,7 @@ public class GameLoop {
         }
         gird2.setPosition();
         
-        /******************** Ce bout de code correspond au deplacement d'un bateau al�atoire ou non en fonction du nombre de joueur ************************/
+        /******************** Ce bout de code correspond au deplacement d'un bateau al�atoire ou non en fonction du nombre de joueur ************************/
         System.out.println("\n player's 1 turn ! \n");
 		gird1.printGird();	
 		gird1.moveShip();
@@ -139,126 +141,267 @@ public class GameLoop {
 
         //Game loop
         String position = "A1";
+        String boat = "Ct";
+        Ship ship = new Ship();
 
 
-        while(gameContinue){
+        
+        /******** GAME LOOP ********/
+        
+        /******** SOLO PLAYER ********/
+        
+        if(nbplayers.equals("1")){
+        	//1 player
+        	
+        	while(gameContinue){
 
+            	//first step
+            	//ask for target type
+            	System.out.println(" ~~~~~~~~~~~~~~~~~~~ Your turn: ~~~~~~~~~~~~~~~~~~~ \n");
+            	do{
+            		gird1.printGird();
+            		System.out.println("Enter a conform SHIP ATTACKER name like (Ct,Cr,Pa,Sm or To): \n");
+                	boat= read.next();
+            	}while(! ship.parseShip(boat));
+            	
+            	//ask for a gird number like 'B5' to player 1 and check if coordonnees.isCorrect()
+            	do{
+            		gird1.printGird();
+            		 System.out.println("Enter a TARGET COORDINATE on the grid at the max range from your attacker ship: - "+ gird1.searchRange(boat)+"- , like (A0,B6,j9,...) : \n");
+                     position = read.next();
+                     coordonnees.parsePoint(position);
+            	}while(coordonnees.parsePoint(position) && !gird1.checkProximity(coordonnees,boat));
+               
 
-            //ask for a gird number like 'B5' to player 1 and check if coordonnees.isCorrect()
-
-
-
-            System.out.println("Enter a TARGET coordinate on the grid (A0,B6,j9,...) : \n");
-            position = read.next();
-            coordonnees.parsePoint(position);
-
-            //first step
-            while(!coordonnees.isCorrect() && !gird1.checkProximity(coordonnees)) {
-                if(!gird1.checkProximity(coordonnees)){
-                    gird1.printGird();
-                    System.out.println("Your target have to be at 2 square from one of your boat, enter an new coordinate: \n");
-                }
-
-                if(!coordonnees.isCorrect())
-                    System.out.println("Enter another correct target coordinate on the grid like A0,B6,j9,... : \n");
-
-                position = read.next(); 
-                coordonnees.parsePoint(position);
-            }
-
-            //use target method
-            while(gird1.target(coordonnees,gird2)){
-                System.out.println("Congratulation you touch something: \n");
-                System.out.println("Play again, enter a target coordinate on the grid (A0,B6,j9,...) : \n");
-
-                //play again
-                while(!coordonnees.isCorrect() && !gird1.checkProximity(coordonnees)) {
-
-                    if(!gird1.checkProximity(coordonnees)){
-                        gird1.printGird();
-                        System.out.println("Your target have to be at 2 square from one of your boat, enter an new coordinate: \n");
+                //use target method
+                while(gird1.target(coordonnees,gird2)){
+                    System.out.println("Congratulation you touch something: \n");
+                    
+                  //check ship.lives >= 2
+                    int i = 0;
+                    for (Ship myship : gird2.pShips) {
+                    	
+                        if(myship.lives>=2){
+                            System.out.println("~~~~~~~~~~~~~~~~~~~ YOU KILL: "+ myship.name +" ~~~~~~~~~~~~~~~~~~~  \n");
+                            i++;
+                        }
+                        if(i>=5){
+                        	System.out.println("~~~~~~~~~~~~~~~~~~~ CONGRATULATION YOU WIN ~~~~~~~~~~~~~~~~~~~  \n");
+                            gameContinue = false;
+                            break;
+                        }
                     }
+                    i = 0;
+                    
+                  //ask for target type
+                	do{
+                		gird1.printGird();
+                		System.out.println("Enter a conform SHIP ATTACKET name like (Ct,Cr,Pa,Sm or To): \n");
+                    	boat= read.next();
+                	}while(! ship.parseShip(boat));
+                	
+                	//ask for a gird number like 'B5' to player 1 and check if coordonnees.isCorrect()
+                	do{
+                		gird1.printGird();
+                		 System.out.println("Enter a TARGET COORDINATE on the grid at the max range from your attacker ship: - "+ gird1.searchRange(boat)+"- , like (A0,B6,j9,...) : \n");
+                         position = read.next();
+                         coordonnees.parsePoint(position);
+                	}while(coordonnees.parsePoint(position) && !gird1.checkProximity(coordonnees,boat));
 
-                    if(!coordonnees.isCorrect())
-                        System.out.println("Enter another correct target coordinate on the grid like A0,B6,j9,... : \n");
-
-                    position = read.next(); // Scans the next token of the input as an int.
-                    coordonnees.parsePoint(position);
                 }
+                System.out.println("It was just... water \n");
+                gird1.moveShip();
+                gird1.setPosition();
+                
 
-            }
+           
 
-            //chech ship.lives >= 2
-            for (Ship myship : gird2.pShips) {
-                if(myship.lives>=2){
-                    System.out.println("CONGRATULATION YOU WIN \n");
-                    gameContinue = false;
-                }
-
-            }
-
-
-            //virtual player 2 try and check if coordonnees.isCorrect()
-            do{
-                coordonnees.setRandom();
-
-            }while (gird2.checkProximity(coordonnees));
-
-            while(gird2.target(coordonnees,gird1)){
-
+                //virtual player 2 try and check if coordonnees.isCorrect()
+                System.out.println("~~~~~~~~~~~~~~~~~~~ Virtual player is playing ~~~~~~~~~~~~~~~~~~~ \n");
+                String shipName = "";
                 do{
                     coordonnees.setRandom();
+                    shipName = ship.generateRandom();
 
-                }while (gird2.checkProximity(coordonnees));
+                }while (gird2.checkProximity(coordonnees,shipName));
 
-            }
+                while(gird2.target(coordonnees,gird1)){
+                	System.out.println("Hum, virtual player touch you: \n");
+                	//check ship.lives >= 2
+                    int i = 0;
+                    for (Ship myship : gird2.pShips) {
+                    	
+                        if(myship.lives>=2){
+                            System.out.println("~~~~~~~~~~~~~~~~~~~ VIRTUAL PLAYER KILL: "+ myship.name +" ~~~~~~~~~~~~~~~~~~~  \n");
+                            i++;
+                        }
+                        if(i>=5){
+                        	System.out.println("~~~~~~~~~~~~~~~~~~~ VIRTUAL PLAYER WIN ~~~~~~~~~~~~~~~~~~~  \n");
+                            gameContinue = false;
+                            break;
+                        }
+                    }
+                    i = 0;
+                	
 
+                	do{
+                        coordonnees.setRandom();
+                        shipName = ship.generateRandom();
 
-            //chech ship.lives >= 2
-            for (Ship myship : gird1.pShips) {
-                if(myship.lives>=2){
-                    System.out.println("CONGRATULATION YOU WIN \n");
-                    gameContinue = false;
+                    }while (gird2.checkProximity(coordonnees,shipName));
+
                 }
+                System.out.println("Virtual player touch water \n");
+                gird2.moveRandomShip();
+                gird2.setPosition();
+
 
             }
-            // ? who win
-            // ? new game
+        	
+        	
+        	
+        }else{
+        	
+        	// 2 players
+        	
+        	while(gameContinue){
 
+            	//first step
+            	//ask for target type
+            	System.out.println(" ~~~~~~~~~~~~~~~~~~~ Player 1 turn: ~~~~~~~~~~~~~~~~~~~ \n");
+            	do{
+            		gird1.printGird();
+            		System.out.println("Enter a conform SHIP ATTACKER name like (Ct,Cr,Pa,Sm or To): \n");
+                	boat= read.next();
+            	}while(! ship.parseShip(boat));
+            	
+            	//ask for a gird number like 'B5' to player 1 and check if coordonnees.isCorrect()
+            	do{
+            		 gird1.printGird();
+            		 System.out.println("Enter a TARGET COORDINATE on the grid at the max range from your attacker ship: - "+ gird1.searchRange(boat)+"- , like (A0,B6,j9,...) : \n");
+                     position = read.next();
+                     coordonnees.parsePoint(position);
+            	}while(coordonnees.parsePoint(position) && !gird1.checkProximity(coordonnees,boat));
+               
 
+                //use target method
+                while(gird1.target(coordonnees,gird2)){
+                    System.out.println("Congratulation you touch something: \n");
+                    
+                    
+                  //check ship.lives >= 2
+                    int i = 0;
+                    for (Ship myship : gird2.pShips) {
+                    	
+                        if(myship.lives>=2){
+                            System.out.println("~~~~~~~~~~~~~~~~~~~ PLAYER 1: YOU KILL: "+ myship.name +" ~~~~~~~~~~~~~~~~~~~  \n");
+                            i++;
+                        }
+                        if(i>=5){
+                        	System.out.println("~~~~~~~~~~~~~~~~~~~ PLAYER 1: CONGRATULATION YOU WIN ~~~~~~~~~~~~~~~~~~~  \n");
+                            gameContinue = false;
+                            break;
+                        }
+                    }
+                    i = 0;
+                    
+                    
+                  //ask for target type
+                	do{
+                		gird1.printGird();
+                		System.out.println("Enter a conform SHIP ATTACKET name like (Ct,Cr,Pa,Sm or To): \n");
+                    	boat= read.next();
+                	}while(! ship.parseShip(boat));
+                	
+                	//ask for a gird number like 'B5' to player 1 and check if coordonnees.isCorrect()
+                	do{
+                		gird1.printGird();
+                		 System.out.println("Enter a TARGET COORDINATE on the grid at the max range from your attacker ship: - "+ gird1.searchRange(boat)+"- , like (A0,B6,j9,...) : \n");
+                         position = read.next();
+                         coordonnees.parsePoint(position);
+                	}while(coordonnees.parsePoint(position) && !gird1.checkProximity(coordonnees,boat));
 
+                }
+                System.out.println("It was just... water \n");
+                gird1.moveShip();
+                gird1.setPosition();
+                
+                
+                
+              //player 2 turn
+            	//ask for target type
+            	System.out.println(" ~~~~~~~~~~~~~~~~~~~ Player 2 turn: ~~~~~~~~~~~~~~~~~~~ \n");
+            	do{
+            		System.out.println(" Player 2 grid: \n");
+            		gird2.printGird();
+            		System.out.println("Player 2: enter a conform SHIP ATTACKER name like (Ct,Cr,Pa,Sm or To): \n");
+                	boat= read.next();
+            	}while(! ship.parseShip(boat));
+            	
+            	//ask for a gird number 
+            	do{
+            		System.out.println(" Player 2 grid: \n");
+            		gird2.printGird();
+            		 System.out.println("Player 2: enter a TARGET COORDINATE on the grid at the max range from your attacker ship: - "+ gird1.searchRange(boat)+"- , like (A0,B6,j9,...) : \n");
+                     position = read.next();
+                     coordonnees.parsePoint(position);
+            	}while(coordonnees.parsePoint(position) && !gird1.checkProximity(coordonnees,boat));
+               
 
+                //use target method
+                while(gird1.target(coordonnees,gird1)){
+                    System.out.println("Player 2: Congratulation you touch something: \n");
+                    
+                    
+                  //check ship.lives >= 2
+                    int i = 0;
+                    for (Ship myship : gird1.pShips) {
+                    	
+                        if(myship.lives>=2){
+                            System.out.println("~~~~~~~~~~~~~~~~~~~ PLAYER 2: YOU KILL: "+ myship.name +" ~~~~~~~~~~~~~~~~~~~  \n");
+                            i++;
+                        }
+                        if(i>=5){
+                        	System.out.println("~~~~~~~~~~~~~~~~~~~ PLAYER 2: CONGRATULATION YOU WIN ~~~~~~~~~~~~~~~~~~~  \n");
+                            gameContinue = false;
+                            break;
+                        }
+                    }
+                    i = 0;
+                    
+                  //ask for target type
+                	do{
+                		System.out.println(" Player 2 grid: \n");
+                		gird2.printGird();
+                		System.out.println("Player 2: Enter a conform SHIP ATTACKET name like (Ct,Cr,Pa,Sm or To): \n");
+                    	boat= read.next();
+                	}while(! ship.parseShip(boat));
+                	
+                	//ask for a gird number 
+                	do{
+                		System.out.println(" Player 2 grid: \n");
+                		gird2.printGird();
+                		 System.out.println("Player 2: Enter a TARGET COORDINATE on the grid at the max range from your attacker ship: - "+ gird1.searchRange(boat)+"- , like (A0,B6,j9,...) : \n");
+                         position = read.next();
+                         coordonnees.parsePoint(position);
+                	}while(coordonnees.parsePoint(position) && !gird1.checkProximity(coordonnees,boat));
+
+                }
+                System.out.println("Player 2: It was just... water \n");
+                System.out.println(" Player 2 grid: \n");
+        		gird2.printGird();
+                gird2.moveShip();
+                gird2.setPosition();
+                System.out.println(" Player 2 grid: \n");
+        		gird2.printGird();
+                
+
+            }
+        	
         }
+        
+        
         read.close();
-
-
-
-
-
-        //bout de test
-        /*coordonnees.parsePoint("C7");
-        System.out.println("space? "+gird1.checkSpace(coordonnees,1,false));
-
-        //Add ship example
-        Porte_avion porte_avion = new Porte_avion();
-        coordonnees.parsePoint("B5");
-        System.out.println("X : "+coordonnees.getX());
-        System.out.println("Y : "+coordonnees.getY());
-        if(coordonnees.isCorrect()&&gird1.checkSpace(coordonnees,porte_avion.size,true))
-            gird1.setShip(porte_avion,coordonnees,porte_avion.size,true);
-
-        Torpilleur torpilleur = new Torpilleur();
-
-
-
-        System.out.println("X : "+coordonnees.getX());
-        System.out.println("Y : "+coordonnees.getY());
-        if(coordonnees.isCorrect())
-            gird1.setShip(torpilleur,coordonnees,5,false);
-
-        gird1.printGird();*/
-
-
 
     }
 

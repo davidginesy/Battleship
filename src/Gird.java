@@ -389,97 +389,152 @@ public class Gird {
 	}
 
 
-	//this method check if the proximity of the parameter coordonnees respect the rules on the current gird
-	public boolean checkProximity(Coordonnees coordonnees){
-
-        if (!coordonnees.isCorrect()){
-            return false;
+	
+    //This method check if one boat is dead
+    public boolean checkDead(){
+    	
+    	for (Ship myship : pShips) {
+            if(myship.lives>=2){
+                return true;
+            }
         }
-
-        int x = coordonnees.getX();
-        int y = coordonnees.getY();
-        int xp1, xp2, xm1, xm2;
-        int yp1, yp2, ym1, ym2;
-
-        if(x-1>=0)
-            xm1 = x-1;
-        else
-            xm1 = x;
-
-        if(x-2>=0)
-            xm2 = x-2;
-        else
-            xm2 = x;
-
-
-        if(y-1>=0)
-            ym1 = y-1;
-        else
-            ym1 = y;
-
-        if(y-2>=0)
-            ym2 = y-2;
-        else
-            ym2 = y;
-
-
-
-        if(x+1<=9)
-            xp1 = x+1;
-        else
-            xp1 = x;
-
-        if(x+2<=9)
-            xp2 = x+2;
-        else
-            xp2 = x;
-
-
-        if(y+1<=9)
-            yp1 = y+1;
-        else
-            yp1 = y;
-
-        if(y+2<=9)
-            yp2 = y+2;
-        else
-            yp2 = y;
-
-
-        if(! ((gird[x][y].equals("~~"))||(gird[x][y].equals("X~"))||(gird[x][y].equals("XX"))))
-            return true;//on a ship
-
-
-
-        if(! ((gird[xp1][y].equals("~~"))||(gird[xp1][y].equals("X~"))||(gird[xp1][y].equals("XX"))))
-            return true;
-
-        if(! ((gird[xp2][y].equals("~~"))||(gird[xp2][y].equals("X~"))||(gird[xp2][y].equals("XX"))))
-            return true;
-
-        if(! ((gird[xm1][y].equals("~~"))||(gird[xm1][y].equals("X~"))||(gird[xm1][y].equals("XX"))))
-            return true;
-
-        if(! ((gird[xm2][y].equals("~~"))||(gird[xm2][y].equals("X~"))||(gird[xm2][y].equals("XX"))))
-            return true;
-
-
-        if(! ((gird[x][yp1].equals("~~"))||(gird[x][yp1].equals("X~"))||(gird[x][yp1].equals("XX"))))
-            return true;
-
-        if(! ((gird[x][yp2].equals("~~"))||(gird[x][yp2].equals("X~"))||(gird[x][yp2].equals("XX"))))
-            return true;
-
-        if(! ((gird[x][ym1].equals("~~"))||(gird[x][ym1].equals("X~"))||(gird[x][ym1].equals("XX"))))
-            return true;
-
-        if(! ((gird[x][ym2].equals("~~"))||(gird[x][ym2].equals("X~"))||(gird[x][ym2].equals("XX"))))
-            return true;
-
-
-        return false;
-
+    	return false;
     }
+    
+    
+    
+    
+	
+	public boolean checkProximity(Coordonnees coordonnees, String ship){
+		
+		
+		Contre_torpilleur ct = new Contre_torpilleur();
+		Croiseur cr = new Croiseur();
+		Porte_avion pa = new Porte_avion();
+		Sous_marin sm = new Sous_marin();
+		Torpilleur to = new Torpilleur();
+		
+		
+		
+		String shipName = "";
+		int range = 0;
+		
+		if(ship.equalsIgnoreCase(ct.name)){
+			shipName = ct.name;
+			range = ct.range;
+		}else if(ship.equalsIgnoreCase(cr.name)){
+			shipName = cr.name;
+			range = cr.range;
+		}else if(ship.equalsIgnoreCase(pa.name)){
+			shipName = pa.name;
+			range = pa.range;
+		}else if(ship.equalsIgnoreCase(sm.name)){
+			shipName = sm.name;
+			range = sm.range;
+		}else if(ship.equalsIgnoreCase(to.name)){
+			shipName = to.name;
+			range = to.range;
+		}
+	
+		
+		int i = 0;
+		
+		//init:
+		int x = coordonnees.getX();
+		int y = coordonnees.getY();
+		if((x>=0 && x<=9)&&(y>=0 && y<=9)){
+			//on the gird
+			if(gird[x][y].equals("XX")){
+				return false;//still touch
+			}
+		}
+		
+		
+		
+		
+		//LEFT
+		x = coordonnees.getX();
+		y = coordonnees.getY();
+		while(i< range+1){
+			
+			
+			if((x>=0 && x<=9)&&(y>=0 && y<=9)){
+				//on the gird
+				
+				if(gird[x][y].equals(shipName)){
+					return true;//on a ship
+				}else{
+					x--;//left
+				}
+			}
+			
+			i++;
+		}
+		
+		
+		//RIGHT
+		x = coordonnees.getX();
+		y = coordonnees.getY();
+		i = 0;
+		while(i< range+1){
+			
+			
+			if((x>=0 && x<=9)&&(y>=0 && y<=9)){
+				//on the gird
+				
+				if(gird[x][y].equals(shipName)){
+					return true;//on a ship
+				}else{
+					x++;//left
+				}
+			}
+			
+			i++;
+		}
+		
+		//UP
+		x = coordonnees.getX();
+		y = coordonnees.getY();
+		i = 0;
+		while(i< range+1){
+			
+			
+			if((x>=0 && x<=9)&&(y>=0 && y<=9)){
+				//on the gird
+				
+				if(gird[x][y].equals(shipName)){
+					return true;//on a ship
+				}else{
+					y--;//left
+				}
+			}
+			
+			i++;
+		}
+		
+		//DOWN
+		x = coordonnees.getX();
+		y = coordonnees.getY();
+		i = 0;
+		while(i< range+1){
+			
+			
+			if((x>=0 && x<=9)&&(y>=0 && y<=9)){
+				//on the gird
+				
+				if(gird[x][y].equals(shipName)){
+					return true;//on a ship
+				}else{
+					y++;//left
+				}
+			}
+			
+			i++;
+		}
+		
+		
+		return false;
+	}
 
 
 
@@ -538,11 +593,51 @@ public class Gird {
 
         }else{
             gird[coordonnees.getX()][coordonnees.getY()]="X~";
+            
         }
 
         return false;
 
     }
+    
+    
+    
+    
+    
+public int searchRange(String ship){
+		
+		
+		Contre_torpilleur ct = new Contre_torpilleur();
+		Croiseur cr = new Croiseur();
+		Porte_avion pa = new Porte_avion();
+		Sous_marin sm = new Sous_marin();
+		Torpilleur to = new Torpilleur();
+		
+		
+		
+		String shipName = "";
+		int range = 0;
+		
+		if(ship.equalsIgnoreCase(ct.name)){
+			
+			range = ct.range;
+		}else if(ship.equalsIgnoreCase(cr.name)){
+			
+			range = cr.range;
+		}else if(ship.equalsIgnoreCase(pa.name)){
+			
+			range = pa.range;
+		}else if(ship.equalsIgnoreCase(sm.name)){
+			
+			range = sm.range;
+		}else if(ship.equalsIgnoreCase(to.name)){
+			
+			range = to.range;
+		}
+		
+		return range;
+}
+	
 
 
 
@@ -691,7 +786,7 @@ public class Gird {
         		gird[coord.getX()][coord.getY()]="~~";
         		gird[coord.getX()+mvt[0]][coord.getY()+mvt[1]]= movingShip.name;
         	}
-        	printGird();
+        	//printGird();
     	}	
 		
 	}
