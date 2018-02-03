@@ -6,7 +6,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Created by Etudes on 25/01/2018.
+ * Created on 25/01/2018.
+ * this class is the logical grid of the game
+ * stock the attack and is a graphical representation
  */
 public class Gird {
 
@@ -21,7 +23,10 @@ public class Gird {
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
-            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"}};
+            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"}}; 
+    //"XX" if something touched
+    //"X~" if water touched
+    //"~~" is just water
 
     public ArrayList<Ship> pShips = new ArrayList<Ship>();
     
@@ -72,6 +77,8 @@ public class Gird {
     	}
     }
 
+    
+    //This method allow a ship deplacement and interact with the user
     public void moveShip(){
 
         //TODO
@@ -255,7 +262,8 @@ public class Gird {
     }
 
 
-    
+    //Place the ship on the grid
+    //with the correct name
     public void setShipTest(Ship ship) {
     	Coordonnees coord = new Coordonnees();
     	
@@ -263,6 +271,18 @@ public class Gird {
     		coord.parsePointTest(ship.position[i]);
     		//System.out.println("ligne : "+coord.getX() + " colonne : " + coord.getY());
     		 gird[coord.getX()][coord.getY()]=ship.name;
+    	}
+    }
+    
+    
+    //Erase ship
+    //make a logical suppression of the ship on the interface
+    public void eraseShip(Ship ship) {
+    	Coordonnees coord = new Coordonnees();
+    	
+    	for(int i = 0; i<ship.size; i++) {
+    		coord.parsePointTest(ship.position[i]);
+    		 gird[coord.getX()][coord.getY()]="~~";
     	}
     }
 
@@ -299,12 +319,12 @@ public class Gird {
 
             }
         }
-
-
         return true;
     }
     
-    // Cette methode teste si l'entree de l'utilisateur est correcte, si la place est libre et si le bateau est bien sur une ligne ou une colonne.
+    
+    // Cette methode teste si l'entree de l'utilisateur est correcte,
+    //si la place est libre et si le bateau est bien sur une ligne ou une colonne.
     public boolean checkPlacement(Ship ship, ArrayList<Ship> ships) {
 		
 		boolean goodPlacement = false;
@@ -404,7 +424,9 @@ public class Gird {
     
     
     
-	
+	//This method check the proximity between a ship and it target 
+    //return true if the target is in the corect range
+    //return false if the target is out of the range
 	public boolean checkProximity(Coordonnees coordonnees, String ship){
 		
 		
@@ -413,8 +435,7 @@ public class Gird {
 		Porte_avion pa = new Porte_avion();
 		Sous_marin sm = new Sous_marin();
 		Torpilleur to = new Torpilleur();
-		
-		
+
 		
 		String shipName = "";
 		int range = 0;
@@ -452,7 +473,7 @@ public class Gird {
 		
 		
 		
-		//LEFT
+		//check on LEFT
 		x = coordonnees.getX();
 		y = coordonnees.getY();
 		while(i< range+1){
@@ -472,7 +493,7 @@ public class Gird {
 		}
 		
 		
-		//RIGHT
+		//check on RIGHT
 		x = coordonnees.getX();
 		y = coordonnees.getY();
 		i = 0;
@@ -492,7 +513,7 @@ public class Gird {
 			i++;
 		}
 		
-		//UP
+		//check on the UP
 		x = coordonnees.getX();
 		y = coordonnees.getY();
 		i = 0;
@@ -512,7 +533,7 @@ public class Gird {
 			i++;
 		}
 		
-		//DOWN
+		//check DOWN
 		x = coordonnees.getX();
 		y = coordonnees.getY();
 		i = 0;
@@ -540,7 +561,7 @@ public class Gird {
 
     /*this method can be used for sending an attack from girdAttack to girdDef
    * it return true if the target is a ship of girdDef and false if is water
-   * it incremente the nulber of lives for each ship type and print the target on the girdAttack:
+   * it increment the number of lives for each ship type and print the target on the girdAttack:
    *
    * 'XX' is print if the target touched a ship
    * 'X~' is print if the target is water
@@ -562,8 +583,6 @@ public class Gird {
 
         Torpilleur torpilleur = new Torpilleur();
         String To = torpilleur.name;
-
-
 
 
         if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Ct)){
@@ -603,8 +622,8 @@ public class Gird {
     
     
     
-    
-public int searchRange(String ship){
+    //this method return the range of the ship in parameter
+   public int searchRange(String ship){
 		
 		
 		Contre_torpilleur ct = new Contre_torpilleur();
@@ -664,6 +683,7 @@ public int searchRange(String ship){
         }
     }
 
+    //this method move randomly the ship
 	public void moveRandomShip() {
 		// TODO Auto-generated method stub
 		//TODO
