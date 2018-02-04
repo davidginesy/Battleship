@@ -198,7 +198,7 @@ public class GameLoop {
                     	
                         if(myship.lives>=2){
                         	gird2.eraseShip(myship);
-                            System.out.println("~~~~~~~~~~~~~~~~~~~ YOU KILL: "+ myship.name +" ~~~~~~~~~~~~~~~~~~~  \n");
+                            System.out.println("~~~~~~~~~~~~~~~~~~~ YOU KILLED: "+ myship.name +" ~~~~~~~~~~~~~~~~~~~  \n");
                             i++;
                         }
                         if(i>=5){
@@ -312,7 +312,7 @@ public class GameLoop {
                     	
                         if(myship.lives>=2){
                         	gird2.eraseShip(myship);
-                            System.out.println("~~~~~~~~~~~~~~~~~~~ PLAYER 1: YOU KILL: "+ myship.name +" ~~~~~~~~~~~~~~~~~~~  \n");
+                            System.out.println("~~~~~~~~~~~~~~~~~~~ PLAYER 1: YOU KILLED: "+ myship.name +" ~~~~~~~~~~~~~~~~~~~  \n");
                             i++;
                         }
                         if(i>=5){
@@ -372,7 +372,7 @@ public class GameLoop {
                     	
                         if(myship.lives>=2){
                         	gird1.eraseShip(myship);
-                            System.out.println("~~~~~~~~~~~~~~~~~~~ PLAYER 2: YOU KILL: "+ myship.name +" ~~~~~~~~~~~~~~~~~~~  \n");
+                            System.out.println("~~~~~~~~~~~~~~~~~~~ PLAYER 2: YOU KILLED: "+ myship.name +" ~~~~~~~~~~~~~~~~~~~  \n");
                             i++;
                         }
                         if(i>=5){

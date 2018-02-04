@@ -594,7 +594,7 @@ public class Gird {
    */
     public boolean target(Coordonnees coordonnees, Gird girdTarget){
 
-        Contre_torpilleur contre_torpilleur = new Contre_torpilleur();
+        /*Contre_torpilleur contre_torpilleur = new Contre_torpilleur();
         String Ct = contre_torpilleur.name;
 
         Croiseur croiseur = new Croiseur();
@@ -608,30 +608,33 @@ public class Gird {
 
         Torpilleur torpilleur = new Torpilleur();
         String To = torpilleur.name;
-
-
-        if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Ct)){
-            contre_torpilleur.touched();
+        for(int i = 0;i<girdTarget.pShips.size();i++) {
+        	System.out.println(girdTarget.pShips.get(i).name);
+        }
+        
+*/
+        if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals("Ct")){
+        	girdTarget.pShips.get(0).touched();
             girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
-        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Cr)){
-            croiseur.touched();
+        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals("Cr")){
+        	girdTarget.pShips.get(1).touched();
             girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
-        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Pa)){
-            porte_avion.touched();
+        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals("Pa")){
+        	girdTarget.pShips.get(2).touched();
             girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
-        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Sm)){
-            sous_marin.touched();
+        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals("Sm")){
+        	girdTarget.pShips.get(3).touched();
             girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
-        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(To)){
-            torpilleur.touched();
+        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals("To")){
+        	girdTarget.pShips.get(4).touched();
             girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
