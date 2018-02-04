@@ -186,6 +186,7 @@ public class GameLoop {
                         }
                     }
                     i = 0;
+                    
             		
             	}
             	
@@ -194,6 +195,9 @@ public class GameLoop {
             		System.out.println("It was just... water \n");
             		canPlayerMove = true;
             	}
+            	
+            	if(gameContinue == false)
+            		break;
               
 
                 //virtual player 2 try and check if coordonnees.isCorrect()
@@ -314,6 +318,9 @@ public class GameLoop {
                 
                 //player 2 turn
             	//ask for target type
+            	if(gameContinue == false)
+            		break;
+            	
             	System.out.println(" ~~~~~~~~~~~~~~~~~~~ Player 2 turn: ~~~~~~~~~~~~~~~~~~~ \n");
             	if(canPlayerMove) {
             		grid2.printGird();
