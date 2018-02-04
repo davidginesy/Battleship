@@ -116,7 +116,11 @@ public class Gird {
     			do {
         			System.out.println("\n Select the ship you want to move (Ct, Cr, Pa, Sm or To) : \n");
             		answer = read.next();
-            	}while(!answer.toUpperCase().equals("CT") && !answer.toUpperCase().equals("CR") && !answer.toUpperCase().equals("PA") && !answer.toUpperCase().equals("SM") && !answer.toUpperCase().equals("TO"));        
+            		if(isDead(answer)) {
+            			answer = " ";
+            			System.out.println("Your "+answer+" is dead... Try again !");
+            		}
+            	}while(!answer.toUpperCase().equals("CT") && !answer.toUpperCase().equals("CR") && !answer.toUpperCase().equals("PA") && !answer.toUpperCase().equals("SM") && !answer.toUpperCase().equals("TO") );        
         		int indice = 0;
             	while(!pShips.get(indice).name.toUpperCase().equals(answer.toUpperCase())) {
             		indice++;
@@ -229,7 +233,7 @@ public class Gird {
 				int minC = colonne.indexOf(Collections.min(colonne));
 	            coord.setX(ligne.get(minL) + mvt[0]);
 	            coord.setY(colonne.get(minC) + mvt[1]);
-	            System.out.println("coord "+ " x : "+coord.getX()+" y : "+coord.getY()+" direction : "+direction);
+	           // System.out.println("coord "+ " x : "+coord.getX()+" y : "+coord.getY()+" direction : "+direction);
 	            result = checkSpace(coord, movingShip.size, direction, movingShip);
     		}while(!result);
     		System.out.println("Your "+movingShip.name + " moved "+ moves[0] + " "+ moves[1]);
@@ -247,7 +251,17 @@ public class Gird {
 
 
 
-    //this method set specific Ship like child of Ship on the gird
+    public boolean isDead(String name) {
+		for(int i = 0;i<10;i++) {
+			for( int j = 0;j<10;j++) {
+				if(gird[i][j].toUpperCase().equals(name.toUpperCase())) return false;
+			}
+		}
+		return true;
+	}
+
+
+	//this method set specific Ship like child of Ship on the gird
     //coordonnees is the coo of the HEAD of the ship and horizontal the orientation
     public void setShip(Ship ship, Coordonnees coordonnees, int size, Boolean horizontal){
 
