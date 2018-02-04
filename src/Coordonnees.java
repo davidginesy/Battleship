@@ -76,6 +76,7 @@ public class Coordonnees {
 
 
         if(X>-1 && X<=9 && Y>-1 && Y<=9){
+        	
             return true;
         }
 

@@ -43,7 +43,8 @@ public class GameLoop {
         	nbplayers = read.next();
         	System.out.println("You choose "+nbplayers+ " player(s) \n");
         }while( !nbplayers.equals("1") && !nbplayers.equals("2"));
-       
+    	System.out.println(" ~~~~~~~~~~~~~~~~~~~ Player 1 turn: ~~~~~~~~~~~~~~~~~~~ \n");
+
         System.out.println("You are about to position your ships on the grid. In order to position a ship, enter its coordinates one by one (a0,A9,B4,j9,...)."
         		+ " \nThe order is IMPORTANT !"
         		+ "To position a 3-case long ship on the first line in the upper left of the grid, enter : a0, a1, a2 ! \nHave fun :D "
@@ -69,7 +70,7 @@ public class GameLoop {
 		System.out.println("\n You have successfully placed your ships !! \n");
 		
         //player 2
-        System.out.println("\n player's 2 turn ! \n ");
+        
 		
         Gird gird2 = new Gird();
         //print the gird
@@ -82,6 +83,7 @@ public class GameLoop {
        
         if(nbplayers.equals("1")) {  //random init for player 2
         	boolean direction;
+        	System.out.println("~~~~~~~~~~~~~~~~~~~ A Virtual player is playing ~~~~~~~~~~~~~~~~~~~ \n");
     		for (Ship myship : gird2.pShips) {					
     			do {
     				
@@ -93,9 +95,11 @@ public class GameLoop {
     				} while (!gird2.checkSpace(coordonnees, myship.size, direction, myship));
     			gird2.setShip(myship, coordonnees,myship.size, direction);
     			}
-    		System.out.println("\n Sips placed !! \n");
+    		System.out.println("\n Ships placed ! \n");
         }
         else {
+        	System.out.println(" ~~~~~~~~~~~~~~~~~~~ Player 2 turn: ~~~~~~~~~~~~~~~~~~~ \n");
+
         	System.out.println("You are about to position your ships on the grid. In order to position a ship, enter its coordinates one by one (a0,A9,B4,j9,...)."
             		+ " \nThe order is IMPORTANT !"
             		+ "To position a 3-case long ship on the first line in the upper left of the grid, enter : a0, b0, c0 ! \nHave fun :D "
@@ -123,7 +127,7 @@ public class GameLoop {
         gird2.setPosition();
         
         /******************** Ce bout de code correspond au deplacement d'un bateau alï¿½atoire ou non en fonction du nombre de joueur ************************/
-        System.out.println("\n player's 1 turn ! \n");
+        /*System.out.println("\n player's 1 turn ! \n");
 		gird1.printGird();	
 		gird1.moveShip();
 		gird1.setPosition();
@@ -146,6 +150,7 @@ public class GameLoop {
         String position = "A1";
         String boat = "Ct";
         Ship ship = new Ship();
+        boolean canPlayerMove = false;
 
 
         
@@ -160,16 +165,23 @@ public class GameLoop {
             	//first step
             	//ask for target type
             	System.out.println(" ~~~~~~~~~~~~~~~~~~~ Your turn: ~~~~~~~~~~~~~~~~~~~ \n");
+            	if(canPlayerMove) {
+        			gird1.moveShip();
+        			gird1.setPosition();
+        			canPlayerMove= false;
+        		}
             	do{
             		gird1.printGird();
+            		System.out.println("~~~~~~~~~~~~~~~~~~~ SHOTS FIRED : ~~~~~~~~~~~~~~~~~~~  \n");
+            		gird2.printAttackGird();
             		System.out.println("Enter a conform SHIP ATTACKER name like (Ct,Cr,Pa,Sm or To): \n");
                 	boat= read.next();
             	}while(! ship.parseShip(boat));
             	
             	//ask for a gird number like 'B5' to player 1 and check if coordonnees.isCorrect()
             	do{
-            		gird1.printGird();
-            		 System.out.println("Enter a TARGET COORDINATE on the grid at the max range from your attacker ship: - "+ gird1.searchRange(boat)+"- , like (A0,B6,j9,...) : \n");
+            		
+            		 System.out.println("Enter a TARGET COORDINATE on the grid like (A0,B6,j9,...). Your "+boat+" has a range of " + gird1.searchRange(boat)+" \n");
                      position = read.next();
                      coordonnees.parsePoint(position);
             	}while(coordonnees.parsePoint(position) && !gird1.checkProximity(coordonnees,boat));
@@ -198,13 +210,23 @@ public class GameLoop {
                     i = 0;
             		
             	}
-                System.out.println("It was just... water \n");
-                gird1.moveShip();
-                gird1.setPosition();
+            	
+        	
+            	else {
+            		System.out.println("It was just... water \n");
+            		canPlayerMove = true;
+            	}
               
 
                 //virtual player 2 try and check if coordonnees.isCorrect()
-                System.out.println("~~~~~~~~~~~~~~~~~~~Â Virtual player is playing ~~~~~~~~~~~~~~~~~~~ \n");
+                System.out.println("~~~~~~~~~~~~~~~~~~~ A Virtual player is playing ~~~~~~~~~~~~~~~~~~~ \n");
+                if(canPlayerMove) {
+                	System.out.println("Virtual player can move...");
+                	gird2.moveRandomShip();
+                	gird2.setPosition();
+                	canPlayerMove = false;
+                }
+                
                 String shipName = "";
                 do{
                 	//generate random 
@@ -216,7 +238,7 @@ public class GameLoop {
                 //use target method
             	if(gird2.target(coordonnees,gird1)){
             		
-            		System.out.println("Congratulation you touch something: \n");
+            		System.out.println("Congratulations, Virtual player touched something \n");
             		
             		//check ship.lives >= 2
                     int i = 0;
@@ -236,12 +258,16 @@ public class GameLoop {
                     i = 0;
             		
             	}
-            	 System.out.println("Virtual player touch water \n");
-                 gird2.moveRandomShip();
-                 gird2.setPosition();
-            }
+            	else {
+            		canPlayerMove = true;
+            		System.out.println("Virtual player touched water \n");
+            	}
+            	System.out.println("~~~~~~~~~~~~~~~~~~~ SHOTS FIRED : ~~~~~~~~~~~~~~~~~~~  \n");
+                gird1.printAttackGird();
+       
+                
         	
-        	
+        	}	
         /******** DUAL PLAYER ********/		
         	
         }else{
@@ -252,17 +278,25 @@ public class GameLoop {
             	//first step
             	//ask for target type like ct, cr...
             	System.out.println(" ~~~~~~~~~~~~~~~~~~~ Player 1 turn: ~~~~~~~~~~~~~~~~~~~ \n");
-            	do{
+            	if(canPlayerMove) {
             		gird1.printGird();
+        			gird1.moveShip();
+        			gird1.setPosition();
+        			canPlayerMove= false;
+        		}
+            	do{
+            		
+            		gird1.printGird();
+            		System.out.println("~~~~~~~~~~~~~~~~~~~ SHOTS FIRED : ~~~~~~~~~~~~~~~~~~~  \n");
+            		gird2.printAttackGird();
             		System.out.println("Enter a conform SHIP ATTACKER name like (Ct,Cr,Pa,Sm or To): \n");
                 	boat= read.next();
             	}while(! ship.parseShip(boat));
             	
             	//ask for a gird number like 'B5' to player 1 and check if coordonnees.isCorrect()
             	do{
-            		 gird1.printGird();
-            		 System.out.println("Enter a TARGET COORDINATE on the grid at the max range from your attacker ship: - "+ gird1.searchRange(boat)+"- , like (A0,B6,j9,...) : \n");
-                     position = read.next();
+            		
+            		System.out.println("Enter a TARGET COORDINATE on the grid like (A0,B6,j9,...). Your "+boat+" has a range of " + gird1.searchRange(boat)+" \n");                     position = read.next();
                      coordonnees.parsePoint(position);
             	}while(coordonnees.parsePoint(position) && !gird1.checkProximity(coordonnees,boat));
                
@@ -290,9 +324,12 @@ public class GameLoop {
                     i = 0;
             		
             	}
-                System.out.println("It was just... water \n");
-                gird1.moveShip();
-                gird1.setPosition();
+            	else {
+            		System.out.println("It was just... water \n");
+            		canPlayerMove = true;
+            	}
+                
+          
             
                 
                 
@@ -300,19 +337,26 @@ public class GameLoop {
                 //player 2 turn
             	//ask for target type
             	System.out.println(" ~~~~~~~~~~~~~~~~~~~ Player 2 turn: ~~~~~~~~~~~~~~~~~~~ \n");
-            	do{
-            		System.out.println(" Player 2 grid: \n");
+            	if(canPlayerMove) {
             		gird2.printGird();
+        			gird2.moveShip();
+        			gird2.setPosition();
+        			canPlayerMove= false;
+        		}
+            	System.out.println(" Player 2 grid: \n");
+        		gird2.printGird();
+        		System.out.println("~~~~~~~~~~~~~~~~~~~ SHOTS FIRED : ~~~~~~~~~~~~~~~~~~~  \n");
+        		gird1.printAttackGird();
+            	do{
+            		
             		System.out.println("Player 2: enter a conform SHIP ATTACKER name like (Ct,Cr,Pa,Sm or To): \n");
                 	boat= read.next();
             	}while(! ship.parseShip(boat));
             	
             	//ask for a gird number 
             	do{
-            		 System.out.println(" Player 2 grid: \n");
-            		 gird2.printGird();
-            		 System.out.println("Player 2: enter a TARGET COORDINATE on the grid at the max range from your attacker ship: - "+ gird1.searchRange(boat)+"- , like (A0,B6,j9,...) : \n");
-                     position = read.next();
+            		
+            		System.out.println("Enter a TARGET COORDINATE on the grid like (A0,B6,j9,...). Your "+boat+" has a range of " + gird1.searchRange(boat)+" \n");                     position = read.next();
                      coordonnees.parsePoint(position);
             	}while(coordonnees.parsePoint(position) && !gird2.checkProximity(coordonnees,boat));
                
@@ -340,13 +384,11 @@ public class GameLoop {
                     i = 0;
             		
             	}
-            	System.out.println("Player 2: It was just... water \n");
-                System.out.println(" Player 2 grid: \n");
-        		gird2.printGird();
-                gird2.moveShip();
-                gird2.setPosition();
-                System.out.println(" Player 2 grid: \n");
-        		gird2.printGird();
+            	else {
+            		System.out.println("Player 2: It was just... water \n");
+            		canPlayerMove = true;
+            	}
+            	
           
             }
         	

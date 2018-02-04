@@ -24,6 +24,18 @@ public class Gird {
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"}}; 
+    
+    public String attackGrid[][]={
+            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
+            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
+            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
+            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
+            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
+            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
+            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
+            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
+            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
+            {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"}}; 
     //"XX" if something touched
     //"X~" if water touched
     //"~~" is just water
@@ -122,7 +134,8 @@ public class Gird {
                 }while(!answer.toUpperCase().equals("N") && !answer.toUpperCase().equals("UP") &&  !answer.toUpperCase().equals("DOWN") && !answer.toUpperCase().equals("LEFT") &&  !answer.toUpperCase().equals("RIGHT"));
             	if(!answer.toUpperCase().equals("N")) moves[1]=answer.toUpperCase();
             	else moves[1] = " ";
-            	
+            	mvt[0] = 0;
+            	mvt[1] = 0;
             	
             	
             	
@@ -216,14 +229,17 @@ public class Gird {
 				int minC = colonne.indexOf(Collections.min(colonne));
 	            coord.setX(ligne.get(minL) + mvt[0]);
 	            coord.setY(colonne.get(minC) + mvt[1]);
+	            System.out.println("coord "+ " x : "+coord.getX()+" y : "+coord.getY()+" direction : "+direction);
 	            result = checkSpace(coord, movingShip.size, direction, movingShip);
-    		}while(!checkSpace(coord, movingShip.size, direction, movingShip));
+    		}while(!result);
     		System.out.println("Your "+movingShip.name + " moved "+ moves[0] + " "+ moves[1]);
-        	for(int i  =0; i<movingShip.size; i++) {
+    		eraseShip(movingShip);
+    		setShip(movingShip, coord, movingShip.size, direction);
+        	/*for(int i  =0; i<movingShip.size; i++) {
         		coord.parsePoint(movingShip.position[i]);
         		gird[coord.getX()][coord.getY()]="~~";
         		gird[coord.getX()+mvt[0]][coord.getY()+mvt[1]]= movingShip.name;
-        	}
+        	}*/
         	printGird();
     	}	
     }
@@ -297,23 +313,32 @@ public class Gird {
         int y = coordonnees.getY();
 
         if(horizontal){
-            if((y+size)>9 || x<0 || y>9 || y<0 || x>9)
-                return false;
+            if((y+size-1)>9 || x<0 || y>9 || y<0 || x>9) {
+            	return false;
+            }
+                
             while(i < size){
 
-                if(! (gird[x][y].equals("~~") && !gird[x][y].equals(ship.name) ))
-                    return false;
+                if(! (gird[x][y].equals("~~"))) {
+                	if(!gird[x][y].equals(ship.name)) {
+                    	return false;
+                    }
+                }
+                
+                    
                 y++;
                 i++;
             }
 
         }else{
-            if((x+size)>9 || x<0 || y>9 || y<0 || x>9)
+            if((x+size-1)>9 || x<0 || y>9 || y<0 || x>9)
                 return false;
             while(i < size){
-
-                if(! (gird[x][y].equals("~~")  && !gird[x][y].equals(ship.name)))
-                    return false;
+            	if(! (gird[x][y].equals("~~"))) {
+                	if(!gird[x][y].equals(ship.name)) {
+                    	return false;
+                    }
+                }
                 x++;
                 i++;
 
@@ -587,31 +612,31 @@ public class Gird {
 
         if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Ct)){
             contre_torpilleur.touched();
-            gird[coordonnees.getX()][coordonnees.getY()]="XX";
+            girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
         }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Cr)){
             croiseur.touched();
-            gird[coordonnees.getX()][coordonnees.getY()]="XX";
+            girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
         }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Pa)){
             porte_avion.touched();
-            gird[coordonnees.getX()][coordonnees.getY()]="XX";
+            girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
         }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(Sm)){
             sous_marin.touched();
-            gird[coordonnees.getX()][coordonnees.getY()]="XX";
+            girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
         }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals(To)){
             torpilleur.touched();
-            gird[coordonnees.getX()][coordonnees.getY()]="XX";
+            girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
         }else{
-            gird[coordonnees.getX()][coordonnees.getY()]="X~";
+        	girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="X~";
             
         }
 
@@ -677,6 +702,23 @@ public class Gird {
             for(int j = 0; j<10; j++)
             {
                 System.out.print("\t"+ gird[i][j]);
+            }
+            System.out.println();
+
+        }
+    }
+    //this method can print the current attack gird
+    public void printAttackGird(){
+    	String[] rows = {"A","B","C","D","E","F","G","H","I","J"};
+    	System.out.println("\t0 \t1 \t2 \t3 \t4 \t5 \t6 \t7 \t8 \t9");
+	    System.out.println();
+
+        for(int i = 0; i<10; i++)
+        {
+        	System.out.print(rows[i]+" ");
+            for(int j = 0; j<10; j++)
+            {
+                System.out.print("\t"+ attackGrid[i][j]);
             }
             System.out.println();
 
