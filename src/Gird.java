@@ -461,6 +461,9 @@ public class Gird {
     }
     
     
+   
+    
+    
     
     
 	//This method check the proximity between a ship and it target 
@@ -596,6 +599,22 @@ public class Gird {
 		return false;
 	}
 
+	
+	//This method check if the ship is available for an attack
+	 public boolean isAlive(String ship){
+		 
+		 for(int i = 0; i<10; i++)
+	        {
+	            for(int j = 0; j<10; j++)
+	            {
+	                if(gird[i][j].equalsIgnoreCase(ship)){
+	                	return true;
+	                }
+	            }
+	    	
+	        }
+		 return false;
+	 }
 
 
     /*this method can be used for sending an attack from girdAttack to girdDef

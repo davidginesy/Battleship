@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
-
 /**
  * Created by Etudes on 25/01/2018.
  * This class is the main loop of the game and interact with the user
@@ -83,7 +82,7 @@ public class GameLoop {
        
         if(nbplayers.equals("1")) {  //random init for player 2
         	boolean direction;
-        	System.out.println("~~~~~~~~~~~~~~~~~~~ A Virtual player is playing ~~~~~~~~~~~~~~~~~~~ \n");
+        	System.out.println("~~~~~~~~~~~~~~~~~~~ A Virtual player is playing ~~~~~~~~~~~~~~~~~~~ \n");
     		for (Ship myship : gird2.pShips) {					
     			do {
     				
@@ -176,7 +175,7 @@ public class GameLoop {
             		gird2.printAttackGird();
             		System.out.println("Enter a conform SHIP ATTACKER name like (Ct,Cr,Pa,Sm or To): \n");
                 	boat= read.next();
-            	}while(! ship.parseShip(boat));
+            	}while(!(ship.parseShip(boat)&&gird1.isAlive(boat)));
             	
             	//ask for a gird number like 'B5' to player 1 and check if coordonnees.isCorrect()
             	do{
@@ -219,7 +218,7 @@ public class GameLoop {
               
 
                 //virtual player 2 try and check if coordonnees.isCorrect()
-                System.out.println("~~~~~~~~~~~~~~~~~~~ A Virtual player is playing ~~~~~~~~~~~~~~~~~~~ \n");
+                System.out.println("~~~~~~~~~~~~~~~~~~~ A Virtual player is playing ~~~~~~~~~~~~~~~~~~~ \n");
                 if(canPlayerMove) {
                 	System.out.println("Virtual player can move...");
                 	gird2.moveRandomShip();
@@ -291,7 +290,7 @@ public class GameLoop {
             		gird2.printAttackGird();
             		System.out.println("Enter a conform SHIP ATTACKER name like (Ct,Cr,Pa,Sm or To): \n");
                 	boat= read.next();
-            	}while(! ship.parseShip(boat));
+            	}while(!(ship.parseShip(boat)&&gird1.isAlive(boat)));
             	
             	//ask for a gird number like 'B5' to player 1 and check if coordonnees.isCorrect()
             	do{
@@ -351,7 +350,7 @@ public class GameLoop {
             		
             		System.out.println("Player 2: enter a conform SHIP ATTACKER name like (Ct,Cr,Pa,Sm or To): \n");
                 	boat= read.next();
-            	}while(! ship.parseShip(boat));
+            	}while(!(ship.parseShip(boat)&&gird2.isAlive(boat)));
             	
             	//ask for a gird number 
             	do{
