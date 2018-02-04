@@ -30,18 +30,19 @@ public class Coordonnees {
     public boolean isCorrect(){
         return correct;
     }
-
+    
+    //generate randoms between 0 and 9
     public void setRandom(){
 
         Random rand1 = new Random();
         Random rand2 = new Random();
-        X = rand1.nextInt(10); //generate random between 0 and 9
+        X = rand1.nextInt(10);
         Y = rand2.nextInt(10);
 
     }
 
     //cette methode prend en parametre les coordonnées rentrée au format 'B4'
-    //retourne les coordonées sous forme d'un objet ou -1, -1 si incorecte
+    //retourne les coordonées sous forme d'un objet
     public boolean parsePoint(String coord) {
 
         coord = coord.toUpperCase();
@@ -84,6 +85,7 @@ public class Coordonnees {
     }
 
 
+    // Transform string into coordinate
     public void parsePointTest(String coord) {
         
             

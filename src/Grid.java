@@ -10,10 +10,10 @@ import java.util.Scanner;
  * this class is the logical grid of the game
  * stock the attack and is a graphical representation
  */
-public class Gird {
+public class Grid {
 
-    //empty gird of water
-    public String gird[][]={
+    //empty grid of water
+    public String grid[][]={
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
@@ -25,6 +25,7 @@ public class Gird {
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"}}; 
     
+    // grid of shots fired
     public String attackGrid[][]={
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
             {"~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~", "~~"},
@@ -40,8 +41,10 @@ public class Gird {
     //"X~" if water touched
     //"~~" is just water
 
+    // List of 1 player'ships
     public ArrayList<Ship> pShips = new ArrayList<Ship>();
     
+    // checks the grid and update ships' positions
     public void setPosition() {
     	
     	String[] rows = {"A","B","C","D","E","F","G","H","I","J"};
@@ -53,11 +56,11 @@ public class Gird {
     	
     	for(int i = 0; i<10; i++) {
     		for(int j = 0; j<10; j++) {
-    			if(gird[i][j].equals("Ct")) Ct.add(rows[i]+Integer.toString(j));
-    			else if(gird[i][j].equals("Cr")) Cr.add(rows[i]+Integer.toString(j));
-    			else if(gird[i][j].equals("Pa")) Pa.add(rows[i]+Integer.toString(j));
-    			else if(gird[i][j].equals("Sm")) Sm.add(rows[i]+Integer.toString(j));
-    			else if(gird[i][j].equals("To")) To.add(rows[i]+Integer.toString(j));
+    			if(grid[i][j].equals("Ct")) Ct.add(rows[i]+Integer.toString(j));
+    			else if(grid[i][j].equals("Cr")) Cr.add(rows[i]+Integer.toString(j));
+    			else if(grid[i][j].equals("Pa")) Pa.add(rows[i]+Integer.toString(j));
+    			else if(grid[i][j].equals("Sm")) Sm.add(rows[i]+Integer.toString(j));
+    			else if(grid[i][j].equals("To")) To.add(rows[i]+Integer.toString(j));
     		}
     	}
     	for(Ship ship : pShips) {
@@ -90,12 +93,12 @@ public class Gird {
     }
 
     
-    //This method allow a ship deplacement and interact with the user
+    //This method allows a ship deplacement and interact with the user
     public void moveShip(){
 
-        //TODO
-        //deplacer le bateau donné en parametre
-    	Scanner read = new Scanner(System.in);
+        
+    	@SuppressWarnings("resource")
+		Scanner read = new Scanner(System.in);
     	String answer;
     	Ship movingShip;
     	String[] moves = new String[2];
@@ -233,28 +236,24 @@ public class Gird {
 				int minC = colonne.indexOf(Collections.min(colonne));
 	            coord.setX(ligne.get(minL) + mvt[0]);
 	            coord.setY(colonne.get(minC) + mvt[1]);
-	           // System.out.println("coord "+ " x : "+coord.getX()+" y : "+coord.getY()+" direction : "+direction);
 	            result = checkSpace(coord, movingShip.size, direction, movingShip);
     		}while(!result);
+    		
     		System.out.println("Your "+movingShip.name + " moved "+ moves[0] + " "+ moves[1]);
+    		
     		eraseShip(movingShip);
     		setShip(movingShip, coord, movingShip.size, direction);
-        	/*for(int i  =0; i<movingShip.size; i++) {
-        		coord.parsePoint(movingShip.position[i]);
-        		gird[coord.getX()][coord.getY()]="~~";
-        		gird[coord.getX()+mvt[0]][coord.getY()+mvt[1]]= movingShip.name;
-        	}*/
         	printGird();
     	}	
     }
 
 
 
-
+    // Checks if a ship is dead using its name
     public boolean isDead(String name) {
 		for(int i = 0;i<10;i++) {
 			for( int j = 0;j<10;j++) {
-				if(gird[i][j].toUpperCase().equals(name.toUpperCase())) return false;
+				if(grid[i][j].toUpperCase().equals(name.toUpperCase())) return false;
 			}
 		}
 		return true;
@@ -265,7 +264,7 @@ public class Gird {
     //coordonnees is the coo of the HEAD of the ship and horizontal the orientation
     public void setShip(Ship ship, Coordonnees coordonnees, int size, Boolean horizontal){
 
-        int i=0, j=0;
+        int i=0;
         int x = coordonnees.getX();
         int y = coordonnees.getY();
         String name = ship.name;
@@ -273,7 +272,7 @@ public class Gird {
         if(horizontal){
             while(i < size){
 
-                gird[x][y]=name;
+                grid[x][y]=name;
                 y++;
                 i++;
 
@@ -282,7 +281,7 @@ public class Gird {
         }else{
             while(i < size){
 
-                gird[x][y]=name;
+                grid[x][y]=name;
                 x++;
                 i++;
 
@@ -299,8 +298,7 @@ public class Gird {
     	
     	for(int i = 0; i<ship.size; i++) {
     		coord.parsePointTest(ship.position[i]);
-    		//System.out.println("ligne : "+coord.getX() + " colonne : " + coord.getY());
-    		 gird[coord.getX()][coord.getY()]=ship.name;
+    		 grid[coord.getX()][coord.getY()]=ship.name;
     	}
     }
     
@@ -312,7 +310,7 @@ public class Gird {
     	
     	for(int i = 0; i<ship.size; i++) {
     		coord.parsePointTest(ship.position[i]);
-    		 gird[coord.getX()][coord.getY()]="~~";
+    		 grid[coord.getX()][coord.getY()]="~~";
     	}
     }
 
@@ -322,7 +320,7 @@ public class Gird {
     //and size the length of the ship
     public boolean checkSpace(Coordonnees coordonnees, int size, Boolean horizontal, Ship ship){
 
-        int i=0, j=0;
+        int i=0;
         int x = coordonnees.getX();
         int y = coordonnees.getY();
 
@@ -333,8 +331,8 @@ public class Gird {
                 
             while(i < size){
 
-                if(! (gird[x][y].equals("~~"))) {
-                	if(!gird[x][y].equals(ship.name)) {
+                if(! (grid[x][y].equals("~~"))) {
+                	if(!grid[x][y].equals(ship.name)) {
                     	return false;
                     }
                 }
@@ -348,8 +346,8 @@ public class Gird {
             if((x+size-1)>9 || x<0 || y>9 || y<0 || x>9)
                 return false;
             while(i < size){
-            	if(! (gird[x][y].equals("~~"))) {
-                	if(!gird[x][y].equals(ship.name)) {
+            	if(! (grid[x][y].equals("~~"))) {
+                	if(!grid[x][y].equals(ship.name)) {
                     	return false;
                     }
                 }
@@ -362,8 +360,7 @@ public class Gird {
     }
     
     
-    // Cette methode teste si l'entree de l'utilisateur est correcte,
-    //si la place est libre et si le bateau est bien sur une ligne ou une colonne.
+    // Check user's input while he places his ships
     public boolean checkPlacement(Ship ship, ArrayList<Ship> ships) {
 		
 		boolean goodPlacement = false;
@@ -371,7 +368,6 @@ public class Gird {
 			
 			String[] pos = ship.position;
 			int index = 0;
-			// test le format de l'entr� de l'utilisateur
 			while (index < ship.size) {
 				
 				if (pos[index].length()!=2 || !letters.contains(pos[index].substring(0, 1))) {
@@ -390,10 +386,9 @@ public class Gird {
 				}
 				index++;
 			}
-			// test si un bateau est deja sur une case rentr� par l'utilisateur
 			for( int i = 0; i<ships.size();i++) {
 				try {
-					boolean test = ships.get(i).position[0].equals("");
+					ships.get(i).position[0].equals("");
 				}
 				catch (Exception e) {
 					continue;
@@ -415,7 +410,6 @@ public class Gird {
 					
 				}
 			}
-			// test si le bateau est bien sur une ligne ou sur une colonne
 			int[] ligne = new int[ship.size];
 			int[] colonne = new int [ship.size];
 			String choix = " ";
@@ -507,7 +501,7 @@ public class Gird {
 		int y = coordonnees.getY();
 		if((x>=0 && x<=9)&&(y>=0 && y<=9)){
 			//on the gird
-			if(gird[x][y].equals("XX")){
+			if(grid[x][y].equals("XX")){
 				return false;//still touch
 			}
 		}
@@ -524,7 +518,7 @@ public class Gird {
 			if((x>=0 && x<=9)&&(y>=0 && y<=9)){
 				//on the gird
 				
-				if(gird[x][y].equals(shipName)){
+				if(grid[x][y].equals(shipName)){
 					return true;//on a ship
 				}else{
 					x--;//left
@@ -545,7 +539,7 @@ public class Gird {
 			if((x>=0 && x<=9)&&(y>=0 && y<=9)){
 				//on the gird
 				
-				if(gird[x][y].equals(shipName)){
+				if(grid[x][y].equals(shipName)){
 					return true;//on a ship
 				}else{
 					x++;//left
@@ -565,7 +559,7 @@ public class Gird {
 			if((x>=0 && x<=9)&&(y>=0 && y<=9)){
 				//on the gird
 				
-				if(gird[x][y].equals(shipName)){
+				if(grid[x][y].equals(shipName)){
 					return true;//on a ship
 				}else{
 					y--;//left
@@ -585,7 +579,7 @@ public class Gird {
 			if((x>=0 && x<=9)&&(y>=0 && y<=9)){
 				//on the gird
 				
-				if(gird[x][y].equals(shipName)){
+				if(grid[x][y].equals(shipName)){
 					return true;//on a ship
 				}else{
 					y++;//left
@@ -607,7 +601,7 @@ public class Gird {
 	        {
 	            for(int j = 0; j<10; j++)
 	            {
-	                if(gird[i][j].equalsIgnoreCase(ship)){
+	                if(grid[i][j].equalsIgnoreCase(ship)){
 	                	return true;
 	                }
 	            }
@@ -625,48 +619,29 @@ public class Gird {
    * 'X~' is print if the target is water
    *
    */
-    public boolean target(Coordonnees coordonnees, Gird girdTarget){
+    public boolean target(Coordonnees coordonnees, Grid girdTarget){
 
-        /*Contre_torpilleur contre_torpilleur = new Contre_torpilleur();
-        String Ct = contre_torpilleur.name;
-
-        Croiseur croiseur = new Croiseur();
-        String Cr = croiseur.name;
-
-        Porte_avion porte_avion = new Porte_avion();
-        String Pa = porte_avion.name;
-
-        Sous_marin sous_marin = new Sous_marin();
-        String Sm = sous_marin.name;
-
-        Torpilleur torpilleur = new Torpilleur();
-        String To = torpilleur.name;
-        for(int i = 0;i<girdTarget.pShips.size();i++) {
-        	System.out.println(girdTarget.pShips.get(i).name);
-        }
-        
-*/
-        if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals("Ct")){
+        if(girdTarget.grid[coordonnees.getX()][coordonnees.getY()].equals("Ct")){
         	girdTarget.pShips.get(0).touched();
             girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
-        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals("Cr")){
+        }else if(girdTarget.grid[coordonnees.getX()][coordonnees.getY()].equals("Cr")){
         	girdTarget.pShips.get(1).touched();
             girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
-        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals("Pa")){
+        }else if(girdTarget.grid[coordonnees.getX()][coordonnees.getY()].equals("Pa")){
         	girdTarget.pShips.get(2).touched();
             girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
-        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals("Sm")){
+        }else if(girdTarget.grid[coordonnees.getX()][coordonnees.getY()].equals("Sm")){
         	girdTarget.pShips.get(3).touched();
             girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
 
-        }else if(girdTarget.gird[coordonnees.getX()][coordonnees.getY()].equals("To")){
+        }else if(girdTarget.grid[coordonnees.getX()][coordonnees.getY()].equals("To")){
         	girdTarget.pShips.get(4).touched();
             girdTarget.attackGrid[coordonnees.getX()][coordonnees.getY()]="XX";
             return true;
@@ -695,7 +670,6 @@ public class Gird {
 		
 		
 		
-		String shipName = "";
 		int range = 0;
 		
 		if(ship.equalsIgnoreCase(ct.name)){
@@ -737,7 +711,7 @@ public class Gird {
         	System.out.print(rows[i]+" ");
             for(int j = 0; j<10; j++)
             {
-                System.out.print("\t"+ gird[i][j]);
+                System.out.print("\t"+ grid[i][j]);
             }
             System.out.println();
 
@@ -761,11 +735,9 @@ public class Gird {
         }
     }
 
-    //this method move randomly the ship
+    //this method moves a ship randomly 
 	public void moveRandomShip() {
-		// TODO Auto-generated method stub
-		//TODO
-        //deplacer le bateau donné en parametre
+		
 		Random rdm = new Random();
 		ArrayList<String> listMove = new ArrayList<>();
 		listMove.add("UP");
@@ -781,7 +753,7 @@ public class Gird {
     	
     	
     	
-    	if(Math.random() < 0.5){
+    	if(Math.random() < 0.9){
     		do {
     			movingShip = pShips.get(rdm.nextInt(pShips.size()));
             	moves[0]=listMove.get(rdm.nextInt(listMove.size()));
@@ -864,6 +836,7 @@ public class Gird {
                 		mvt[1] = -2;
                 	}
             	}
+            	// Checks if the ships can move there
             	ArrayList<Integer> ligne = new ArrayList<>();
             	ArrayList<Integer> colonne = new ArrayList<>();
 	        	for(int m = 0; m<movingShip.size; m++) {
@@ -879,13 +852,12 @@ public class Gird {
 	            coord.setX(ligne.get(minL) + mvt[0]);
 	            coord.setY(colonne.get(minC) + mvt[1]);
     		}while(!checkSpace(coord, movingShip.size, direction, movingShip));
-        	for(int i  =0; i<movingShip.size; i++) {
+        	// moves the ship
+    		for(int i  =0; i<movingShip.size; i++) {
         		coord.parsePoint(movingShip.position[i]);
-        		gird[coord.getX()][coord.getY()]="~~";
-        		gird[coord.getX()+mvt[0]][coord.getY()+mvt[1]]= movingShip.name;
+        		grid[coord.getX()][coord.getY()]="~~";
+        		grid[coord.getX()+mvt[0]][coord.getY()+mvt[1]]= movingShip.name;
         	}
-        	//printGird();
-    	}	
-		
+    	}			
 	}
 }
