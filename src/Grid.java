@@ -64,6 +64,7 @@ public class Grid {
     		}
     	}
     	for(Ship ship : pShips) {
+    		if(isDead(ship.name)) continue;
     		if(ship.name.equals("Ct")) {
     			for(int k = 0; k<ship.size;k++) {
     				ship.position[k] = Ct.get(k);
